@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Coral Resort Management 株式会社｜沖縄・本部町を拠点に、宿泊施設の客室清掃・運営受託、不動産開発、珊瑚再生事業（沖縄海底美術館）を手がけています。">
+<!-- ▼公開時に削除してください（検索エンジンに載せないための指定） -->
+<meta name="robots" content="noindex,nofollow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Coral Resort Management 株式会社">
+<meta property="og:description" content="島の宿を、あずかる。沖縄の宿泊施設の清掃・運営・開発・珊瑚再生。">
+<meta property="og:image" content="assets/img/message-hero.jpg">
+<title>Coral Resort Management 株式会社｜沖縄の宿泊施設運営・客室清掃・不動産開発</title>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500&family=Zen+Old+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400;500&family=Yuji+Mai&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B1D26;--deep:#123243;--sea:#2F6B72;--shallow:#7FB0AC;--aqua:#A8D8D0;
+  --sand:#C2AE8E;--paper:#FAF9F6;--paper-2:#EFEDE8;--line:rgba(11,29,38,.14);
+  --serif:"Zen Old Mincho",serif;--latin:"Marcellus",serif;
+  --sans:"Zen Kaku Gothic New",sans-serif;--util:"Jost",sans-serif;
+  --gut:clamp(20px,5vw,80px);
+  --maxw:1440px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+section[id]{scroll-margin-top:88px}
+a,button{-webkit-tap-highlight-color:transparent}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:2;letter-spacing:.04em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--sand);outline-offset:3px}
+.eyebrow{font-family:var(--util);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--sea)}
+.more{display:inline-flex;align-items:center;gap:14px;font-family:var(--util);font-size:12px;letter-spacing:.28em;text-transform:uppercase;padding-bottom:6px;border-bottom:1px solid var(--sand);transition:gap .4s}
+@media(hover:hover){.more:hover{gap:26px}}
+
+/* ---- ビジュアル枠：SVGが常に表示され、写真が読めればその上に重なる ---- */
+.ph{position:relative;overflow:hidden;background:var(--deep)}
+.ph .scene,.ph .shot{position:absolute;inset:0;width:100%;height:100%}
+.ph .shot{object-fit:cover;opacity:0;transition:opacity 1.2s ease}
+.ph .shot.on{opacity:1}
+.cap{position:absolute;left:10px;bottom:8px;z-index:3;font-family:var(--util);font-size:9px;letter-spacing:.16em;color:rgba(255,255,255,.75);text-shadow:0 1px 6px rgba(0,0,0,.5)}
+/* 3枚スライド */
+.slide__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.4s ease;z-index:1}
+.slide__img.on{opacity:1}
+.slide__dots{position:absolute;right:12px;bottom:12px;z-index:3;display:flex;gap:6px}
+.slide__dots i{display:block;width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.45);transition:background .4s}
+.slide__dots i.on{background:#fff}
+
+/* header */
+.hd{position:fixed;inset:0 0 auto 0;z-index:60;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px max(var(--gut),env(safe-area-inset-right)) 20px max(var(--gut),env(safe-area-inset-left));color:#fff;transition:background .5s,color .5s,padding .5s}
+.hd.solid{background:rgba(250,249,246,.94);backdrop-filter:blur(10px);color:var(--ink);padding-top:10px;padding-bottom:10px}
+.hd.solid .hd__logo{font-size:11.5px;letter-spacing:.2em;line-height:1.45}
+.hd__logo{font-family:var(--latin);font-size:14px;letter-spacing:.24em;line-height:1.5}
+.hd__logo span{display:block}
+.hd__nav{display:flex;align-items:center;gap:clamp(16px,2vw,30px);font-family:var(--util);font-size:12px;letter-spacing:.2em}
+.hd__nav a{padding:6px 2px}
+.hd__cta{border:1px solid currentColor;padding:9px 22px;font-size:11px;letter-spacing:.24em;transition:background .4s,color .4s}
+@media(hover:hover){.hd__cta:hover{background:var(--sand);border-color:var(--sand);color:#fff}}
+.hd__menu{display:none;background:none;border:0;color:inherit;font-family:var(--util);font-size:10px;letter-spacing:.24em;padding:10px 4px;cursor:pointer;align-items:center;gap:8px}
+.hd__menu i{display:block;width:22px;height:9px;position:relative}
+.hd__menu i::before,.hd__menu i::after{content:"";position:absolute;left:0;right:0;height:1.5px;background:currentColor;transition:transform .35s ease,top .35s ease}
+.hd__menu i::before{top:0}.hd__menu i::after{top:8px}
+body.nav-open .hd__menu i::before{top:4px;transform:rotate(45deg)}
+body.nav-open .hd__menu i::after{top:4px;transform:rotate(-45deg)}
+/* モバイル用ドロワー */
+.drawer{position:fixed;inset:0;z-index:55;background:var(--ink);color:var(--paper);display:flex;flex-direction:column;justify-content:center;gap:6px;padding:0 var(--gut);opacity:0;visibility:hidden;transform:translateY(-12px);transition:opacity .4s ease,transform .5s cubic-bezier(.16,1,.3,1),visibility .4s}
+body.nav-open .drawer{opacity:1;visibility:visible;transform:none}
+body.nav-open{overflow:hidden}
+.drawer a{display:block;padding:15px 0;border-bottom:1px solid rgba(250,249,246,.14);font-family:var(--latin);font-size:19px;letter-spacing:.22em}
+
+.drawer__cta{margin-top:26px;display:inline-block;border:1px solid var(--sand);padding:14px 34px;font-family:var(--util);font-size:11px;letter-spacing:.28em;text-align:center}
+
+/* hero */
+.hero{position:relative;height:100svh;min-height:560px;color:#fff;overflow:hidden;display:flex;align-items:center}
+.hero__media{position:absolute;inset:0;overflow:hidden;background:var(--ink)}
+.hero__media .scene,.hero__media .shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero__media .shot{opacity:0;transition:opacity 1.5s ease}
+.hero__media .shot.on{opacity:1}
+.hero__video{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:100%;min-width:177.78vh;transform:translate(-50%,-50%);border:0;pointer-events:none;opacity:0;transition:opacity 2s ease 1.5s}
+.hero__video.on{opacity:1}
+.hero__mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,22,29,.55) 0%,rgba(7,22,29,.2) 45%,rgba(11,29,38,.72) 100%)}
+.hero__horizon{position:absolute;left:0;right:0;top:58%;height:1px;background:rgba(255,255,255,.45);transform:scaleX(0);transform-origin:left;animation:draw 1.9s cubic-bezier(.16,1,.3,1) .3s forwards}
+@keyframes draw{to{transform:scaleX(1)}}
+.hero__inner{position:relative;padding:0 var(--gut);width:100%;z-index:2}
+.hero__eyebrow{color:rgba(255,255,255,.78);opacity:0;animation:up 1.2s ease .8s forwards}
+.hero__copy{font-family:var(--serif);font-weight:500;font-size:clamp(38px,7.4vw,92px);line-height:1.32;letter-spacing:.06em;margin:26px 0 22px;text-shadow:0 2px 40px rgba(0,0,0,.4)}
+.hero__copy span{display:block;opacity:0;animation:up 1.4s cubic-bezier(.16,1,.3,1) forwards}
+.hero__copy span:nth-child(1){animation-delay:.5s}
+.hero__copy span:nth-child(2){animation-delay:.72s}
+.hero__lead{font-size:13px;letter-spacing:.18em;color:rgba(255,255,255,.88);max-width:34em;opacity:0;animation:up 1.2s ease 1.1s forwards;text-shadow:0 1px 20px rgba(0,0,0,.5)}
+@keyframes up{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+.hero__scroll{position:absolute;right:var(--gut);bottom:0;z-index:2;display:flex;flex-direction:column;align-items:center;gap:12px;font-family:var(--util);font-size:9.5px;letter-spacing:.3em;color:rgba(255,255,255,.75);writing-mode:vertical-rl}
+.hero__scroll i{display:block;width:1px;height:80px;background:rgba(255,255,255,.4);position:relative;overflow:hidden}
+.hero__scroll i::after{content:"";position:absolute;inset:0;background:#fff;animation:fall 2.6s ease-in-out infinite}
+@keyframes fall{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
+
+/* 大画面でも行長が伸びすぎないよう内容幅を制限 */
+.sec__head,.about,.msg,.profile,.svc,.works,.flow,.band,.hero__inner,.band-sea__txt,.ft__top,.ft__cp,.ft__note,.sec > .more-wrap{max-width:var(--maxw);margin-left:auto;margin-right:auto}
+.contact__inner{max-width:var(--maxw);margin:0 auto}
+
+/* message / company */
+.msg{max-width:44em}
+.msg__en{font-family:var(--latin);font-size:clamp(12px,1.4vw,15px);letter-spacing:.16em;color:var(--sea);line-height:1.8}
+.msg__jp{font-family:var(--serif);font-size:clamp(15px,1.8vw,19px);letter-spacing:.14em;margin:8px 0 30px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.msg__ttl{margin-top:0;font-family:var(--serif);font-weight:500;font-size:clamp(22px,3.2vw,36px);letter-spacing:.1em;line-height:1.7;margin-bottom:28px}
+.msg__body p{font-size:14px;line-height:2.5;margin-bottom:22px;max-width:38em}
+.msg__sign{margin-top:46px}
+.msg__role{font-size:12px;letter-spacing:.2em;color:rgba(11,29,38,.65)}
+.msg__name{font-family:"Yuji Mai",var(--serif);font-size:clamp(30px,4vw,44px);letter-spacing:.16em;line-height:1.2}
+.msg__signjp{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+.profile{margin-top:clamp(56px,8vw,96px)}
+.profile__ttl{font-family:var(--serif);font-weight:500;font-size:clamp(18px,2.2vw,24px);letter-spacing:.1em;margin-bottom:26px}
+.profile__ttl em{font-style:normal;display:block;font-family:var(--latin);font-size:11px;letter-spacing:.3em;color:var(--sea);margin-bottom:10px}
+.profile__list{border-top:1px solid var(--line)}
+.profile__list > div{display:grid;grid-template-columns:180px 1fr;gap:20px;padding:18px 0;border-bottom:1px solid var(--line)}
+.profile__list dt{font-family:var(--util);font-size:12px;letter-spacing:.2em;color:var(--sea)}
+.profile__list dd{font-size:13.5px;line-height:2.1}
+.tag{font-family:var(--util);font-size:10px;letter-spacing:.14em;color:var(--sand);margin-left:10px}
+@media(max-width:900px){
+  .msg{max-width:none}
+  .profile__list > div{grid-template-columns:1fr;gap:4px;padding:14px 0}
+}
+
+/* ページ切り替え */
+.page[hidden]{display:none}
+.page-head{position:relative;min-height:52vh;display:flex;align-items:flex-end;padding:0 var(--gut) clamp(34px,6vw,64px);overflow:hidden;color:#fff;background:var(--ink)}
+.page-head .scene{position:absolute;inset:0;width:100%;height:100%}
+.page-head__mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,22,29,.5),rgba(11,29,38,.78))}
+.page-head__txt{position:relative;z-index:2;max-width:var(--maxw);margin:0 auto;width:100%}
+.page-head__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.page-head__ttl{font-family:var(--serif);font-weight:500;font-size:clamp(28px,4.6vw,52px);letter-spacing:.14em;margin-top:14px}
+.page-head__en{font-family:var(--latin);font-size:clamp(12px,1.5vw,17px);letter-spacing:.12em;line-height:1.8;margin-top:26px;padding-top:22px;border-top:1px solid rgba(255,255,255,.35);max-width:24em}
+.page-head__jp{font-family:var(--serif);font-size:clamp(14px,1.7vw,19px);letter-spacing:.14em;margin-top:8px;color:rgba(255,255,255,.9)}
+.page-head{min-height:62vh}
+.sec__title--en{font-family:var(--latin);font-weight:400;letter-spacing:.24em}
+
+/* sections */
+.sec{padding:clamp(88px,13vw,180px) var(--gut);position:relative}
+.sec--tint{background:var(--paper-2)}
+.sec--dark{background:var(--ink);color:var(--paper);overflow:hidden}
+.sec--dark .eyebrow{color:var(--sand)}
+.sec__bg{position:absolute;inset:0;z-index:0;opacity:.3}
+.sec__bg .scene{width:100%;height:100%}
+.sec--dark > *:not(.sec__bg){position:relative;z-index:1}
+.sec__head{display:flex;gap:38px;align-items:flex-start;margin-bottom:clamp(38px,6vw,72px)}
+.sec__index{writing-mode:vertical-rl;font-family:var(--util);font-size:10px;letter-spacing:.3em;color:var(--sand);padding-top:6px;white-space:nowrap}
+.sec__title{font-family:var(--serif);font-weight:500;font-size:clamp(26px,3.6vw,42px);line-height:1.45;letter-spacing:.1em;margin-top:14px}
+.sec__title em{font-style:normal;display:block;font-family:var(--latin);font-size:clamp(11px,1.2vw,13px);letter-spacing:.3em;color:var(--sea);margin-bottom:16px}
+.sec--dark .sec__title em{color:var(--shallow)}
+
+.about{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(30px,6vw,80px);align-items:center}
+.about__txt p{font-size:14px;line-height:2.5;margin-bottom:26px;max-width:32em}
+.about__lead{font-family:var(--serif);font-size:clamp(19px,2.4vw,28px)!important;line-height:2!important;letter-spacing:.1em;margin-bottom:34px!important}
+.about__imgs{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.about__imgs .ph{aspect-ratio:3/4}
+.about__imgs .ph:last-child{margin-top:52px}
+
+.svc{border-top:1px solid var(--line)}
+.svc__row{display:grid;grid-template-columns:180px 1fr 300px;gap:clamp(20px,4vw,56px);align-items:center;padding:34px 0;border-bottom:1px solid var(--line);transition:background .5s,padding-left .5s}
+@media(hover:hover){.svc__row:hover{background:rgba(47,107,114,.05);padding-left:18px}}
+.svc__en{font-family:var(--latin);font-size:13px;letter-spacing:.16em;color:var(--sea)}
+.svc__jp{font-family:var(--serif);font-size:clamp(17px,2.1vw,23px);letter-spacing:.1em;margin-bottom:10px}
+.svc__desc{font-size:13px;line-height:2.2;color:rgba(11,29,38,.72);max-width:40em}
+.svc__thumb{aspect-ratio:16/10}
+
+
+.works{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(16px,2.4vw,32px)}
+.work__img{aspect-ratio:4/5;margin-bottom:18px}
+.work__img .scene,.work__img .shot{transition:transform .9s cubic-bezier(.16,1,.3,1)}
+@media(hover:hover){.work:hover .work__img .scene,.work:hover .work__img .shot{transform:scale(1.05)}}
+.work__meta{font-family:var(--util);font-size:10.5px;letter-spacing:.22em;color:var(--sea);display:flex;gap:14px}
+.work__name{font-family:var(--serif);font-size:17px;letter-spacing:.08em;margin-top:10px}
+
+.band-sea{position:relative;height:clamp(320px,58vh,560px);overflow:hidden;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;background:var(--deep)}
+.band-sea .scene,.band-sea .shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.band-sea .shot{opacity:0;transition:opacity 1.2s}
+.band-sea .shot.on{opacity:1}
+.band-sea__mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,29,38,.3),rgba(11,29,38,.5))}
+.band-sea__txt{position:relative;z-index:2;padding:0 var(--gut)}
+.band-sea__jp{font-family:var(--serif);font-size:clamp(20px,3.4vw,36px);letter-spacing:.14em;line-height:1.9;text-shadow:0 2px 30px rgba(0,0,0,.45)}
+.band-sea__en{font-family:var(--util);font-size:10.5px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.82);margin-top:20px}
+
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,3vw,34px)}
+.flow__step{border-top:1px solid var(--sand);padding-top:20px}
+.flow__no{font-family:var(--latin);font-size:12px;letter-spacing:.2em;color:var(--sand)}
+.flow__ttl{font-family:var(--serif);font-size:17px;letter-spacing:.08em;margin:12px 0 10px}
+.flow__txt{font-size:12.5px;line-height:2.1;color:rgba(11,29,38,.7)}
+
+.band{display:grid;grid-template-columns:1.15fr 1fr;gap:clamp(34px,6vw,84px)}
+.news__item{display:flex;gap:26px;align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line);transition:opacity .4s}
+@media(hover:hover){.news__item:hover{opacity:.6}}
+.news__date{font-family:var(--util);font-size:11.5px;letter-spacing:.14em;color:var(--sea);white-space:nowrap}
+.news__ttl{font-size:13.5px;letter-spacing:.06em}
+.rec{position:relative;color:#fff;padding:clamp(34px,5vw,54px);display:flex;flex-direction:column;justify-content:flex-end;min-height:340px;overflow:hidden;background:var(--deep)}
+.rec .scene,.rec .shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.rec .shot{opacity:0;transition:opacity 1.2s}
+.rec .shot.on{opacity:1}
+.rec__mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,29,38,.12),rgba(11,29,38,.8))}
+.rec > *:not(.scene):not(.shot):not(.rec__mask){position:relative;z-index:2}
+.rec__ttl{font-family:var(--serif);font-size:clamp(22px,3vw,32px);letter-spacing:.1em;line-height:1.6;margin:14px 0 16px}
+.rec__txt{font-size:12.5px;line-height:2.2;color:rgba(255,255,255,.86);margin-bottom:26px}
+
+.contact{position:relative;text-align:center;color:#fff;padding:clamp(80px,11vw,150px) var(--gut);overflow:hidden;background:var(--deep)}
+.contact .scene,.contact .shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.contact .shot{opacity:0;transition:opacity 1.2s}
+.contact .shot.on{opacity:1}
+.contact__mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,50,67,.7),rgba(11,29,38,.88))}
+.contact > *:not(.scene):not(.shot):not(.contact__mask){position:relative;z-index:2}
+.contact__inner{position:relative;z-index:2}
+.contact__ttl{font-family:var(--serif);font-size:clamp(24px,4vw,44px);letter-spacing:.12em;line-height:1.6;margin:22px 0 20px}
+.contact__txt{font-size:13px;letter-spacing:.1em;color:rgba(255,255,255,.82);margin-bottom:40px}
+.contact__btn{display:inline-block;border:1px solid rgba(255,255,255,.55);padding:20px 62px;font-family:var(--util);font-size:12px;letter-spacing:.3em;text-transform:uppercase;transition:background .5s,border-color .5s,color .5s}
+@media(hover:hover){.contact__btn:hover{background:var(--sand);border-color:var(--sand);color:var(--ink)}}
+
+.ft{background:var(--ink);color:rgba(250,249,246,.8);padding:clamp(52px,8vw,84px) var(--gut) 34px}
+.ft__top{padding-bottom:36px;border-bottom:1px solid rgba(250,249,246,.14)}
+.ft__logo{font-family:var(--latin);font-size:18px;letter-spacing:.2em;color:#fff}
+.ft__addr{font-size:12px;line-height:2.2;color:rgba(250,249,246,.6);margin-top:18px}
+.ft__cp{font-family:var(--util);font-size:10.5px;letter-spacing:.2em;color:rgba(250,249,246,.45);margin-top:26px}
+.ft__note{font-size:10.5px;line-height:2;color:rgba(250,249,246,.42);margin-top:16px;max-width:60em}
+
+.rv{opacity:0;transform:translateY(34px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+.rv.in{opacity:1;transform:none}
+.note{background:var(--sand);color:var(--ink);font-family:var(--util);font-size:11px;letter-spacing:.14em;text-align:center;padding:10px 16px;line-height:1.7}
+
+/* SVGアニメーション */
+.wave{animation:swell 9s ease-in-out infinite alternate}
+.wave2{animation:swell 13s ease-in-out infinite alternate-reverse}
+@keyframes swell{from{transform:translateX(-14px)}to{transform:translateX(14px)}}
+.shimmer{animation:glow 7s ease-in-out infinite alternate}
+@keyframes glow{from{opacity:.25}to{opacity:.6}}
+
+/* ---- タブレット ---- */
+@media(max-width:1100px){
+  .svc__row{grid-template-columns:140px 1fr 260px;gap:26px}
+  .works{gap:18px}
+}
+/* ---- スマホ・小型タブレット ---- */
+@media(max-width:900px){
+  .hd__nav{display:none}
+  .hd__menu{display:flex}
+  .hd__logo{font-size:12px;letter-spacing:.2em;line-height:1.45}
+  .hd.solid .hd__logo{font-size:11px}
+  .about,.band{grid-template-columns:1fr}
+  .about__imgs{gap:12px}
+  .about__imgs .ph:last-child{margin-top:20px}
+  .svc__row{grid-template-columns:1fr;gap:12px;padding:26px 0}
+  .svc__thumb{aspect-ratio:16/9;order:-1}
+  .svc__en{order:-2}
+  .works{grid-template-columns:1fr 1fr}
+  .flow{grid-template-columns:1fr 1fr;gap:22px}
+  .sec__head{flex-direction:column;gap:10px;margin-bottom:32px}
+  .sec__index{writing-mode:horizontal-tb;padding-top:0}
+  .sec__title{margin-top:0}
+  .about__txt p{max-width:none}
+  .rec{min-height:300px}
+}
+/* ---- 小さめのスマホ ---- */
+@media(max-width:600px){
+  body{line-height:1.95}
+  .works{grid-template-columns:1fr;gap:26px}
+  .work__img{aspect-ratio:16/10}
+  .flow{grid-template-columns:1fr;gap:0}
+  .flow__step{border-top:1px solid var(--line);padding:18px 0}
+  .flow__step:first-child{border-top:2px solid var(--sand)}
+  .hero__scroll{display:none}
+  .hero{min-height:520px}
+  .hero__copy{margin:18px 0 18px}
+  .hero__lead{font-size:12.5px;line-height:2.1}
+  .about__txt p{font-size:13.5px;line-height:2.3}
+  .svc__desc{font-size:13px}
+  .news__item{flex-direction:column;gap:4px;padding:16px 0}
+  .contact__btn{padding:18px 0;width:100%;text-align:center}
+  .band-sea{height:auto;min-height:300px;padding:70px 0}
+  .ft{padding-bottom:calc(34px + env(safe-area-inset-bottom))}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .rv{opacity:1;transform:none}
+  .hero__horizon{transform:scaleX(1)}
+  .hero__eyebrow,.hero__copy span,.hero__lead{opacity:1}
+  .hero__video{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 共通ビジュアル（SVG）：外部通信なしで必ず表示されます ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#DCEDF0"/><stop offset="1" stop-color="#A8D8D0"/>
+    </linearGradient>
+    <linearGradient id="gSea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#A8D8D0"/><stop offset=".35" stop-color="#7FB0AC"/>
+      <stop offset=".72" stop-color="#2F6B72"/><stop offset="1" stop-color="#123243"/>
+    </linearGradient>
+    <linearGradient id="gDeep" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#123243"/><stop offset="1" stop-color="#0B1D26"/>
+    </linearGradient>
+    <linearGradient id="gSand" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F2EADC"/><stop offset="1" stop-color="#C2AE8E"/>
+    </linearGradient>
+    <linearGradient id="gDusk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E7C8A6"/><stop offset=".45" stop-color="#7FB0AC"/>
+      <stop offset="1" stop-color="#123243"/>
+    </linearGradient>
+
+    <!-- 空撮の海（ヒーロー・海帯） -->
+    <symbol id="sc-reef" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+      <rect width="800" height="600" fill="url(#gSea)"/>
+      <path class="wave" d="M-40 120q120-38 240 0t240 0 240 0 160-16v-140h-880z" fill="#C7E7E0" opacity=".55"/>
+      <path class="wave2" d="M-40 180q140-42 280 2t280-2 300 8v-96h-880z" fill="#A8D8D0" opacity=".5"/>
+      <path d="M-40 300q160 40 320 4t320 12 240-10v-70q-180 34-320 4T220 232-40 250z" fill="#3E8189" opacity=".55"/>
+      <ellipse cx="250" cy="404" rx="190" ry="58" fill="#1D5560" opacity=".55"/>
+      <ellipse cx="600" cy="470" rx="220" ry="70" fill="#16414E" opacity=".6"/>
+      <ellipse cx="410" cy="352" rx="90" ry="26" fill="#9FD3CC" opacity=".5"/>
+      <g class="shimmer" fill="#FFFFFF" opacity=".4">
+        <rect x="60" y="150" width="150" height="1.6" rx="1"/>
+        <rect x="300" y="196" width="230" height="1.6" rx="1"/>
+        <rect x="520" y="128" width="180" height="1.6" rx="1"/>
+        <rect x="180" y="250" width="120" height="1.4" rx="1"/>
+      </g>
+      <path class="wave" d="M-40 560q150-34 300 0t300-6 280 12v40h-880z" fill="#0B1D26" opacity=".45"/>
+    </symbol>
+
+    <!-- 海に架かる橋 -->
+    <symbol id="sc-bridge" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+      <rect width="800" height="600" fill="url(#gDusk)"/>
+      <circle cx="640" cy="150" r="42" fill="#FFF3E0" opacity=".85"/>
+      <rect y="252" width="800" height="348" fill="url(#gSea)"/>
+      <path d="M0 252h800v10H0z" fill="#0B1D26" opacity=".25"/>
+      <path class="wave" d="M-40 318q140-30 280 2t280-2 300 6v-40h-860z" fill="#A8D8D0" opacity=".45"/>
+      <path d="M-20 330 L820 296 L820 316 L-20 352 Z" fill="#EFEDE8" opacity=".92"/>
+      <g fill="#D8D4CB" opacity=".9">
+        <rect x="90" y="344" width="14" height="80"/><rect x="290" y="336" width="14" height="80"/>
+        <rect x="490" y="328" width="14" height="80"/><rect x="690" y="320" width="14" height="80"/>
+      </g>
+      <ellipse cx="140" cy="470" rx="230" ry="66" fill="#16414E" opacity=".5"/>
+      <ellipse cx="620" cy="520" rx="260" ry="70" fill="#0F3140" opacity=".5"/>
+      <g class="shimmer" fill="#fff" opacity=".38">
+        <rect x="380" y="420" width="180" height="1.6" rx="1"/><rect x="120" y="392" width="120" height="1.4" rx="1"/>
+      </g>
+    </symbol>
+
+    <!-- 客室（ハウスキーピング） -->
+    <symbol id="sc-room" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+      <rect width="800" height="600" fill="#EFEDE8"/>
+      <rect y="430" width="800" height="170" fill="#DCD5C6"/>
+      <rect x="430" y="70" width="330" height="300" fill="url(#gSea)"/>
+      <rect x="430" y="70" width="330" height="300" fill="none" stroke="#FAF9F6" stroke-width="10"/>
+      <path class="wave" d="M430 240q80-20 160 0t170-6v136H430z" fill="#2F6B72" opacity=".7"/>
+      <rect x="60" y="300" width="330" height="130" rx="6" fill="#FFFFFF"/>
+      <rect x="60" y="270" width="330" height="46" rx="6" fill="#F4F1E9"/>
+      <rect x="86" y="252" width="120" height="42" rx="8" fill="#FFFFFF"/>
+      <rect x="220" y="252" width="120" height="42" rx="8" fill="#FFFFFF"/>
+      <rect x="60" y="352" width="330" height="18" fill="#C2AE8E" opacity=".55"/>
+      <rect x="60" y="430" width="330" height="16" fill="#B9B0A0" opacity=".5"/>
+      <circle cx="470" cy="420" r="10" fill="#2F6B72" opacity=".5"/>
+      <rect x="466" y="428" width="8" height="60" fill="#2F6B72" opacity=".35"/>
+      <g fill="#7FB0AC" opacity=".8">
+        <path d="M640 470c-40-10-60-40-56-70 30 6 54 32 56 70z"/>
+        <path d="M640 470c40-14 58-46 52-76-32 8-54 36-52 76z"/>
+        <rect x="636" y="466" width="8" height="60"/>
+      </g>
+    </symbol>
+
+    <!-- プールヴィラ -->
+    <symbol id="sc-pool" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+      <rect width="800" height="600" fill="url(#gSky)"/>
+      <rect y="170" width="800" height="120" fill="#7FB0AC"/>
+      <path d="M0 250h800v40H0z" fill="#2F6B72" opacity=".5"/>
+      <rect y="286" width="800" height="314" fill="#E9E3D6"/>
+      <rect x="120" y="330" width="560" height="200" rx="8" fill="url(#gSea)"/>
+      <g class="wave" fill="#fff" opacity=".45">
+        <rect x="170" y="380" width="180" height="2" rx="1"/><rect x="400" y="420" width="220" height="2" rx="1"/>
+        <rect x="220" y="470" width="150" height="2" rx="1"/>
+      </g>
+      <rect x="60" y="120" width="240" height="24" fill="#FAF9F6"/>
+      <rect x="80" y="144" width="18" height="150" fill="#FAF9F6"/>
+      <rect x="262" y="144" width="18" height="150" fill="#FAF9F6"/>
+      <g fill="#0B1D26" opacity=".55">
+        <rect x="700" y="300" width="10" height="120"/>
+        <path d="M705 300c-40-16-70-6-86 14 34 4 62 6 86-14z"/>
+        <path d="M705 300c40-16 70-6 86 14-34 4-62 6-86-14z"/>
+        <path d="M705 300c-10-40 4-70 26-84 4 34 2 62-26 84z"/>
+      </g>
+      <g fill="#FAF9F6"><rect x="150" y="548" width="90" height="14" rx="7"/><rect x="270" y="548" width="90" height="14" rx="7"/></g>
+    </symbol>
+
+    <!-- ヴィラ（大屋根＋海） -->
+    <symbol id="sc-villa" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+      <rect width="800" height="600" fill="url(#gSky)"/>
+      <rect y="230" width="800" height="130" fill="#7FB0AC"/>
+      <path class="wave2" d="M-40 300q160-24 320 4t300-4 260 8v52h-880z" fill="#2F6B72" opacity=".65"/>
+      <rect y="358" width="800" height="242" fill="#DED7C6"/>
+      <path d="M110 300 L400 190 L690 300 Z" fill="#123243"/>
+      <rect x="170" y="300" width="460" height="150" fill="#FAF9F6"/>
+      <rect x="220" y="330" width="150" height="120" fill="url(#gDeep)" opacity=".85"/>
+      <rect x="420" y="330" width="170" height="120" fill="url(#gDeep)" opacity=".7"/>
+      <rect x="150" y="450" width="500" height="14" fill="#C2AE8E"/>
+      <g fill="#1D5560" opacity=".75">
+        <rect x="86" y="360" width="9" height="110"/>
+        <path d="M90 360c-34-14-60-6-74 12 30 4 54 6 74-12z"/><path d="M90 360c34-14 60-6 74 12-30 4-54 6-74-12z"/>
+      </g>
+      <ellipse cx="400" cy="520" rx="300" ry="30" fill="#C7BFAC" opacity=".6"/>
+    </symbol>
+
+    <!-- コンドミニアム（緑の中の建物） -->
+    <symbol id="sc-building" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+      <rect width="800" height="600" fill="url(#gSky)"/>
+      <path d="M0 320q160-70 330-30t470-40v350H0z" fill="#2F6B72" opacity=".35"/>
+      <rect x="250" y="120" width="300" height="380" fill="#FAF9F6"/>
+      <g fill="#123243" opacity=".8">
+        <rect x="280" y="150" width="240" height="26"/><rect x="280" y="200" width="240" height="26"/>
+        <rect x="280" y="250" width="240" height="26"/><rect x="280" y="300" width="240" height="26"/>
+        <rect x="280" y="350" width="240" height="26"/><rect x="280" y="400" width="240" height="26"/>
+      </g>
+      <rect x="250" y="100" width="300" height="22" fill="#C2AE8E"/>
+      <rect y="500" width="800" height="100" fill="#5C8F6E" opacity=".55"/>
+      <g fill="#2F6B72" opacity=".7">
+        <circle cx="120" cy="470" r="60"/><circle cx="190" cy="500" r="45"/>
+        <circle cx="670" cy="460" r="70"/><circle cx="740" cy="500" r="50"/>
+      </g>
+    </symbol>
+
+    <!-- 海中（珊瑚再生） -->
+    <symbol id="sc-coral" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+      <rect width="800" height="600" fill="url(#gSea)"/>
+      <g class="shimmer" fill="#FFFFFF" opacity=".35">
+        <path d="M120 0l60 0-90 240-40 0z"/><path d="M340 0l70 0-70 260-50 0z"/><path d="M600 0l60 0-60 220-46 0z"/>
+      </g>
+      <ellipse cx="400" cy="560" rx="460" ry="90" fill="#1D5560" opacity=".7"/>
+      <g fill="#DCC7A8" opacity=".95">
+        <path d="M250 520c-6-40 4-72 22-92 16 20 22 54 14 92z"/>
+        <path d="M296 520c-8-34 0-62 16-80 14 18 20 46 12 80z"/>
+        <path d="M540 526c-8-46 2-80 22-102 18 22 24 60 14 102z"/>
+      </g>
+      <g fill="#E9A2B8" opacity=".9">
+        <path d="M420 528c-10-50 2-88 24-112 20 24 26 66 14 112z"/>
+        <path d="M470 530c-6-34 2-60 18-76 12 16 18 44 10 76z"/>
+      </g>
+      <g fill="#EFEDE8" opacity=".9">
+        <path d="M330 470h140l40 60H290z"/><path d="M356 400h90l30 60H326z"/><path d="M380 344h48l24 54h-96z"/>
+      </g>
+      <g fill="#1D5560" opacity=".55">
+        <circle cx="352" cy="492" r="12"/><circle cx="448" cy="492" r="12"/><circle cx="400" cy="424" r="10"/>
+      </g>
+      <g fill="#F2D06B">
+        <path d="M170 300l34 18-34 18-10-18z"/><path d="M640 360l34 18-34 18-10-18z"/><path d="M700 250l28 15-28 15-8-15z"/>
+      </g>
+      <g fill="#FAF9F6" opacity=".8">
+        <circle cx="150" cy="180" r="7"/><circle cx="166" cy="140" r="5"/><circle cx="140" cy="110" r="4"/>
+      </g>
+    </symbol>
+
+    <!-- 働くひと（採用） -->
+    <symbol id="sc-staff" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+      <rect width="800" height="600" fill="url(#gDusk)"/>
+      <rect y="300" width="800" height="300" fill="url(#gSea)"/>
+      <path class="wave" d="M-40 360q150-30 300 2t300-2 280 8v60h-880z" fill="#A8D8D0" opacity=".4"/>
+      <circle cx="620" cy="140" r="48" fill="#FFF1DC" opacity=".9"/>
+      <g fill="#FAF9F6" opacity=".9">
+        <rect x="120" y="470" width="110" height="18" rx="4"/><rect x="128" y="450" width="94" height="16" rx="4"/>
+      </g>
+    </symbol>
+
+    <!-- 抽象の海（背景用） -->
+    <symbol id="sc-abstract" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+      <rect width="800" height="600" fill="url(#gDeep)"/>
+      <path class="wave" d="M-40 200q160-50 320 0t320 10 240-20v120q-160 40-320 0T180 300-40 330z" fill="#2F6B72" opacity=".5"/>
+      <path class="wave2" d="M-40 400q180-50 360 0t340-10 180 10v220h-880z" fill="#7FB0AC" opacity=".25"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- 公開時はこの1行を削除してください -->
+<div class="note">不動産開発（3枚スライド）と珊瑚再生事業の画像はファイルに埋め込み済みで、通信なしで表示されます。その他の枠はイラスト（＋読み込めればフリー素材の写真）です。</div>
+
+<header class="hd" id="hd">
+  <a href="#" class="hd__logo"><span>Coral</span><span>Resort</span><span>Management</span></a>
+  <nav class="hd__nav">
+    <a href="#about">About</a><a href="#service">Service</a><a href="#works">Works</a>
+    <a href="#news">News</a><a href="#recruit">Recruit</a>
+    <a href="#contact" class="hd__cta">Contact</a>
+  </nav>
+  <button class="hd__menu" id="menuBtn" aria-label="メニュー" aria-expanded="false"><i></i>MENU</button>
+</header>
+
+<nav class="drawer" id="drawer" aria-hidden="true">
+  <a href="#about">About us</a>
+  <a href="#company" data-page="company">Message / Company info</a>
+  <a href="#service">Service</a>
+  <a href="#works">Works</a>
+  <a href="#news">News</a>
+  <a href="#recruit">Recruit</a>
+  <a href="#contact" class="drawer__cta">Contact</a>
+</nav>
+
+<main id="page-top" class="page">
+<!-- HERO -->
+<section class="hero">
+  <div class="hero__media">
+    <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-reef"/></svg>
+    <iframe class="hero__video" id="heroVideo" data-src="https://www.youtube.com/embed/krMtBzdjTuc?autoplay=1&mute=1&loop=1&playlist=krMtBzdjTuc&controls=0&modestbranding=1&playsinline=1&rel=0"
+      title="沖縄の海（仮映像）" allow="autoplay; encrypted-media" tabindex="-1" loading="lazy"></iframe>
+    <div class="hero__mask"></div>
+  </div>
+  <div class="hero__horizon"></div>
+  <div class="hero__inner">
+    <p class="eyebrow hero__eyebrow">Okinawa ／ Hotel Operation &amp; Housekeeping</p>
+    <h1 class="hero__copy"><span>島の宿を、</span><span>あずかる。</span></h1>
+    <p class="hero__lead">清掃から運営まで。沖縄のリゾートに泊まる一日を、舞台裏から支えています。</p>
+  </div>
+  <div class="hero__scroll">Scroll<i></i></div>
+</section>
+
+<!-- ABOUT -->
+<section class="sec" id="about">
+  <div class="sec__head rv">
+    <span class="sec__index">01 ／ About us</span>
+    <h2 class="sec__title"><em>About us</em>整った一室が、旅の記憶をつくる。</h2>
+  </div>
+  <div class="about rv">
+    <div class="about__txt">
+      <p class="about__lead">私たちの仕事は、<br>お客様が来る前に終わっています。</p>
+      <p>ドアを開けた瞬間の空気、たたまれたタオルの角、窓の向こうに広がる海。宿の印象は、滞在が始まる前のわずか数秒で決まります。Coral Resort Management は沖縄・本部町を拠点に、ホテルや宿泊施設の客室清掃と運営をお預かりしてきました。</p>
+      <p>オーナー様にとっては投資、働く仲間にとっては日々の現場、そして旅の方にとっては一生に数度の時間。そのすべてが同じ一室の上に重なっていることを忘れずに、今日も客室に入ります。</p>
+      <a href="#company" class="more" data-page="company">View more →</a>
+    </div>
+    <div class="about__imgs">
+      <div class="ph">
+        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-room"/></svg>
+      </div>
+      <div class="ph">
+        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-bridge"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE -->
+<section class="sec sec--tint" id="service">
+  <div class="sec__head rv">
+    <span class="sec__index">02 ／ Service</span>
+    <h2 class="sec__title"><em>Service</em>宿にまつわる仕事を、ひととおり。</h2>
+  </div>
+  <div class="svc rv">
+    <div class="svc__row">
+      <p class="svc__en">Housekeeping</p>
+      <div>
+        <h3 class="svc__jp">客室清掃・ハウスキーピング受託</h3>
+        <p class="svc__desc">ホテル・コンドミニアム・貸別荘の客室清掃を受託。繁忙期の人員確保、清掃品質のチェック体制、リネンの手配までを一括で担います。</p>
+      </div>
+      <div class="ph svc__thumb">
+        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-room"/></svg>
+        <img class="shot on" src="assets/img/service-housekeeping.jpg" alt="客室清掃・ハウスキーピング">
+        
+      </div>
+    </div>
+    <div class="svc__row">
+      <p class="svc__en">Operation</p>
+      <div>
+        <h3 class="svc__jp">宿泊施設の運営受託</h3>
+        <p class="svc__desc">フロント業務、予約・OTA運用、料金設定、日々の収支管理まで。オーナー様に代わって、宿を一棟まるごと運営します。</p>
+      </div>
+      <div class="ph svc__thumb">
+        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
+        <img class="shot on" src="assets/img/service-operation.jpg" alt="宿泊施設の運営受託">
+        
+      </div>
+    </div>
+    <div class="svc__row">
+      <p class="svc__en">Development</p>
+      <div>
+        <h3 class="svc__jp">不動産開発</h3>
+        <p class="svc__desc">土地の個性を読み解くところから、宿泊施設の企画・設計・開業までを一貫して手がけます。地形や岩をそのまま活かした、その場所にしか建たない宿をつくります。</p>
+      </div>
+      <div class="ph svc__thumb slide">
+        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
+        <img class="slide__img on" src="assets/img/development-01.jpg" alt="開発計画 外観">
+        <img class="slide__img" src="assets/img/development-02.jpg" alt="開発計画 ラウンジ">
+        <img class="slide__img" src="assets/img/development-03.jpg" alt="開発計画 バスルーム">
+        <span class="slide__dots"></span>
+        <span class="cap">開発計画イメージ</span>
+      </div>
+    </div>
+    <div class="svc__row">
+      <p class="svc__en">Coral Regeneration</p>
+      <div>
+        <h3 class="svc__jp">珊瑚再生事業（沖縄海底美術館）</h3>
+        <p class="svc__desc">サンゴの苗を育て、海底に移植し、その生育を見守る取り組みです。作品としての構造物とサンゴが一体になった「沖縄海底美術館」を、地域の海とともに育てています。</p>
+      </div>
+      <div class="ph svc__thumb">
+        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-coral"/></svg>
+        <img class="shot on" src="assets/img/coral-museum.jpg" alt="沖縄海底美術館とサンゴ移植">
+        <span class="cap">沖縄海底美術館</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section class="sec" id="works">
+  <div class="sec__head rv">
+    <span class="sec__index">03 ／ Works</span>
+    <h2 class="sec__title sec__title--en">Works</h2>
+  </div>
+  <div class="works rv">
+    <a href="#" class="work">
+      <div class="ph work__img">
+        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
+        <img class="shot on" src="assets/img/works-yawnyard-kouri.jpg" alt="ヨーンヤード古宇利島">
+        
+      </div>
+      <p class="work__meta"><span>Kouri Island</span><span>今帰仁村</span></p>
+      <p class="work__name">ヨーンヤード古宇利島</p>
+    </a>
+    <a href="#" class="work">
+      <div class="ph work__img">
+        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-pool"/></svg>
+        <img class="shot on" src="assets/img/works-poolvilla-amaha.jpg" alt="プールヴィラ天羽">
+        
+      </div>
+      <p class="work__meta"><span>Unten</span><span>今帰仁村</span></p>
+      <p class="work__name">プールヴィラ天羽</p>
+    </a>
+    <a href="#" class="work">
+      <div class="ph work__img">
+        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-building"/></svg>
+        <img class="shot on" src="assets/img/works-lieta-nakayama.jpg" alt="リエッタ中山">
+        
+      </div>
+      <p class="work__meta"><span>Nago</span><span>名護市</span></p>
+      <p class="work__name">リエッタ中山</p>
+    </a>
+  </div>
+  <p style="margin-top:44px" class="rv"><a href="#" class="more">All works →</a></p>
+</section>
+
+<!-- SEA BAND -->
+<section class="band-sea">
+  <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-bridge"/></svg>
+  <div class="band-sea__mask"></div>
+  <div class="band-sea__txt">
+    <p class="band-sea__jp">海のそばに、<br>私たちの現場があります。</p>
+    <p class="band-sea__en">Motobu ／ Nakijin ／ Nago</p>
+  </div>
+</section>
+
+<!-- FLOW -->
+<section class="sec sec--tint">
+  <div class="sec__head rv">
+    <span class="sec__index">04 ／ Flow</span>
+    <h2 class="sec__title"><em>Flow</em>ご相談から運営開始まで。</h2>
+  </div>
+  <div class="flow rv">
+    <div class="flow__step"><p class="flow__no">01</p><h3 class="flow__ttl">お問い合わせ</h3><p class="flow__txt">施設の規模、現在の運営状況、お困りごとをお聞かせください。</p></div>
+    <div class="flow__step"><p class="flow__no">02</p><h3 class="flow__ttl">現地確認・ご提案</h3><p class="flow__txt">客室を実際に拝見し、清掃・運営の体制と費用をご提案します。</p></div>
+    <div class="flow__step"><p class="flow__no">03</p><h3 class="flow__ttl">ご契約・準備</h3><p class="flow__txt">人員配置、マニュアル、備品とリネンの手配を進めます。</p></div>
+    <div class="flow__step"><p class="flow__no">04</p><h3 class="flow__ttl">運営開始</h3><p class="flow__txt">稼働後も月次でご報告し、改善点を一緒に見ていきます。</p></div>
+  </div>
+</section>
+
+<!-- NEWS + RECRUIT -->
+<section class="sec" id="news">
+  <div class="band">
+    <div class="rv">
+      <div class="sec__head">
+        <span class="sec__index">05 ／ News</span>
+        <h2 class="sec__title"><em>News</em>お知らせ</h2>
+      </div>
+      <a href="#" class="news__item"><span class="news__date">2026.08.01</span><span class="news__ttl">受託施設を更新いたしました</span></a>
+      <a href="#" class="news__item"><span class="news__date">2026.07.20</span><span class="news__ttl">夏季休業のお知らせ</span></a>
+      <a href="#" class="news__item"><span class="news__date">2026.06.11</span><span class="news__ttl">本部町の宿泊施設の運営を開始しました</span></a>
+      <p style="margin-top:34px"><a href="#" class="more">All news →</a></p>
+    </div>
+    <div class="rec rv" id="recruit">
+      <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-staff"/></svg>
+      <div class="rec__mask"></div>
+      <p class="eyebrow" style="color:var(--sand)">Recruit</p>
+      <h2 class="rec__ttl">海のそばで、<br>働きませんか。</h2>
+      <p class="rec__txt">未経験から始めたスタッフがほとんどです。清掃スタッフ、フロント、マネージャー候補を募集しています。</p>
+      <p><a href="#" class="more" style="color:#fff">Recruit →</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-reef"/></svg>
+  <div class="contact__mask"></div>
+  <div class="contact__inner">
+    <p class="eyebrow" style="color:var(--sand)">Contact</p>
+    <h2 class="contact__ttl">その宿の運営、<br>お預かりできるかもしれません。</h2>
+    <p class="contact__txt">清掃だけ、繁忙期だけのご相談も歓迎です。</p>
+    <a href="#" class="contact__btn">お問い合わせ</a>
+  </div>
+</section>
+
+</main>
+
+<main id="page-company" class="page" hidden>
+  <section class="page-head">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="沖縄の海">
+    <div class="page-head__mask"></div>
+    <div class="page-head__txt">
+      <p class="eyebrow" style="color:var(--sand)">Message / Company info</p>
+      <h1 class="page-head__ttl">代表挨拶</h1>
+      <p class="page-head__en">Building on flexibility, we adapt in diverse ways and expand</p>
+      <p class="page-head__jp">柔軟さをもとに多様に変化し、拡張へ</p>
+    </div>
+  </section>
+<section class="sec" id="company">
+  <div class="msg rv">
+    <div class="msg__body">
+      <h3 class="msg__ttl">「かたちを、決めない。」</h3>
+      <p>客室清掃から始まり、運営受託、不動産開発、そして珊瑚再生へ。事業の輪郭は毎年変わってきました。</p>
+      <p>変えずにきたのは、目の前の宿と海にとって必要なことを考えるという一点だけです。</p>
+      <p>世の中が目まぐるしく変化する昨今では柔軟である事は、何にでも合わせることではなく、必要に応じて自分のかたちを変えられるということ。私たちはこれからも、沖縄という場所が求めるものに合わせて変化し、進化してまいります。</p>
+      <div class="msg__sign">
+        <p class="msg__signjp"><span class="msg__role">代表取締役</span><span class="msg__name">宮里　聡</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile rv">
+    <h3 class="profile__ttl"><em>Company profile</em>会社概要</h3>
+    <dl class="profile__list">
+      <div><dt>会社名</dt><dd>Coral Resort Management 株式会社</dd></div>
+      <div><dt>所在地</dt><dd>沖縄県国頭郡本部町字健堅130 コーポ丸徳1階</dd></div>
+      <div><dt>代表者</dt><dd>代表取締役　宮里　聡</dd></div>
+      <div><dt>設立</dt><dd>2022年10月</dd></div>
+      <div><dt>事業内容</dt><dd>客室清掃・ハウスキーピング受託／宿泊施設の運営受託／不動産開発／珊瑚再生事業（沖縄海底美術館）</dd></div>
+    </dl>
+  </div>
+</section>
+
+  <div class="sec" style="padding-top:0">
+    <a href="#top" class="more" data-page="top">← Back to top</a>
+  </div>
+</main>
+
+<footer class="ft">
+  <div class="ft__top">
+    <div>
+      <p class="ft__logo">CORAL RESORT MANAGEMENT</p>
+      <p class="ft__addr">Coral Resort Management 株式会社<br>沖縄県国頭郡本部町字健堅130 コーポ丸徳1階</p>
+    </div>
+  </div>
+  <p class="ft__cp">© 2026 Coral Resort Management Inc.</p>
+  <p class="ft__note">※デザイン検討用モックアップ。イラストはこのファイル内に埋め込まれた仮ビジュアル、写真はフリー素材サービス（LoremFlickr／Flickrのフリーライセンス画像）とYouTube公開映像を仮に読み込んでいます。公開時は自社撮影素材または許諾取得済み素材へ差し替えてください。</p>
+</footer>
+
+<script>
+const hd=document.getElementById('hd');
+addEventListener('scroll',()=>{hd.classList.toggle('solid',scrollY>innerHeight*0.82)},{passive:true});
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%3)*90+'ms';io.observe(el)});
+/* 不動産開発：3枚のスライド */
+document.querySelectorAll('.slide').forEach(box=>{
+  const imgs=[...box.querySelectorAll('.slide__img')];
+  const dots=box.querySelector('.slide__dots');
+  if(dots) imgs.forEach((_,i)=>{const d=document.createElement('i');if(i===0)d.className='on';dots.appendChild(d)});
+  if(imgs.length<2||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let n=0;
+  setInterval(()=>{
+    imgs[n].classList.remove('on');
+    if(dots) dots.children[n].classList.remove('on');
+    n=(n+1)%imgs.length;
+    imgs[n].classList.add('on');
+    if(dots) dots.children[n].classList.add('on');
+  },4200);
+});
+/* ヒーロー動画：PCかつ動きを許可している場合のみ読み込む（スマホは通信量を節約） */
+const v=document.getElementById('heroVideo');
+if(v){
+  const okMotion=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const wide=matchMedia('(min-width: 901px)').matches;
+  if(okMotion&&wide){v.addEventListener('load',()=>v.classList.add('on'));v.src=v.dataset.src}
+  else{v.remove()}
+}
+
+/* ページ切り替え（実制作では /company/ など別ページになります） */
+const pages={top:document.getElementById('page-top'),company:document.getElementById('page-company')};
+function showPage(name,anchor){
+  Object.entries(pages).forEach(([k,el])=>{el.hidden=(k!==name)});
+  document.body.classList.remove('nav-open');
+  hd.classList.toggle('solid',name!=='top');
+  if(anchor){const t=document.getElementById(anchor);if(t){t.scrollIntoView();return}}
+  scrollTo(0,0);
+}
+document.querySelectorAll('[data-page]').forEach(el=>{
+  el.addEventListener('click',e=>{e.preventDefault();showPage(el.dataset.page);history.replaceState(null,'',el.dataset.page==='top'?'#top':'#company')});
+});
+/* ヘッダーのアンカーはTOPへ戻ってから移動 */
+document.querySelectorAll('.hd__nav a[href^="#"], .drawer a[href^="#"]:not([data-page])').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const id=a.getAttribute('href').slice(1);
+    if(pages.company.hidden) return;
+    e.preventDefault();showPage('top',id);
+  });
+});
+if(location.hash==='#company')showPage('company');
+
+/* モバイルメニュー */
+const btn=document.getElementById('menuBtn'),drawer=document.getElementById('drawer');
+const closeNav=()=>{document.body.classList.remove('nav-open');btn.setAttribute('aria-expanded','false');drawer.setAttribute('aria-hidden','true')};
+btn.addEventListener('click',()=>{
+  const open=document.body.classList.toggle('nav-open');
+  btn.setAttribute('aria-expanded',open);drawer.setAttribute('aria-hidden',!open);
+});
+drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeNav));
+addEventListener('keydown',e=>{if(e.key==='Escape')closeNav()});
+addEventListener('resize',()=>{if(innerWidth>900)closeNav()});
+</script>
+</body>
+</html>
