@@ -64,8 +64,8 @@ docker compose down              # stop (data persists in named volumes)
 ```
 
 - Admin: http://localhost:3000/admin — first run seeds the password from
-  `ADMIN_PASSWORD` in docker-compose.yml (default `coral-admin-2026`).
-  Change it: `docker compose exec coral node scripts/set-password.js 'new-password'`
+  `ADMIN_PASSWORD` in docker-compose.yml.
+  Change it: `docker compose exec coral node server/scripts/set-password.js 'new-password'`
 - Persistent data lives in named volumes: `coral-data` (content, password,
   inquiries) and `coral-uploads` (admin-uploaded images). `docker compose down -v`
   DELETES them — omit `-v` to keep data.
