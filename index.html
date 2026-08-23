@@ -734,7 +734,23 @@ body.nav-open{overflow:hidden}
   </div>
 </main>
 
-<main id="page-recruit" class="page" hidden><!--CMS:RECRUIT_PAGE--><!--/CMS:RECRUIT_PAGE--></main>
+<main id="page-recruit" class="page" hidden><!--CMS:RECRUIT_PAGE-->
+  <section class="page-head">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="スタッフ募集">
+    <div class="page-head__mask"></div>
+    <div class="page-head__txt">
+      <p class="eyebrow" style="color:var(--sand)">Recruit</p>
+      <h1 class="page-head__ttl">海のそばで、<br>働きませんか。</h1>
+      <p class="page-head__en">Work by the sea</p>
+      <p class="page-head__jp">スタッフ募集</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="msg rv">
+      <p>（このページの文言は後ほど差し替えます。）</p><p>未経験から始めたスタッフがほとんどです。清掃スタッフ、フロント、マネージャー候補を募集しています。ご応募・お問い合わせをお待ちしています。</p>
+      <p style="margin-top:36px"><a href="#top" class="more" data-page="top">← Back to top</a></p>
+    </div>
+  </section><!--/CMS:RECRUIT_PAGE--></main>
 
 <footer class="ft">
   <div class="ft__top">
@@ -802,6 +818,8 @@ btn.addEventListener('click',()=>{
 drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeNav));
 addEventListener('keydown',e=>{if(e.key==='Escape')closeNav()});
 addEventListener('resize',()=>{if(innerWidth>900)closeNav()});
+/* リンク先未設定（#）のプレースホルダーはページ先頭へ飛ばさない（暫定） */
+document.querySelectorAll('a[href="#"]').forEach(a=>a.addEventListener('click',e=>e.preventDefault()));
 </script>
 </body>
 </html>
