@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>document.documentElement.className+=' js'</script>
 <meta name="description" content="Coral Resort Management 株式会社｜沖縄・本部町を拠点に、宿泊施設の客室清掃・運営受託、不動産開発、珊瑚再生事業（沖縄海底美術館）を手がけています。">
 <!-- ▼公開時に削除してください（検索エンジンに載せないための指定） -->
 <meta name="robots" content="noindex,nofollow">
@@ -76,8 +77,6 @@ body.nav-open{overflow:hidden}
 .hero__media .scene,.hero__media .shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero__media .shot{opacity:0;transition:opacity 1.5s ease}
 .hero__media .shot.on{opacity:1}
-.hero__video{position:absolute;top:50%;left:50%;width:100vw;height:56.25vw;min-height:100%;min-width:177.78vh;transform:translate(-50%,-50%);border:0;pointer-events:none;opacity:0;transition:opacity 2s ease 1.5s}
-.hero__video.on{opacity:1}
 .hero__mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,22,29,.55) 0%,rgba(7,22,29,.2) 45%,rgba(11,29,38,.72) 100%)}
 .hero__horizon{position:absolute;left:0;right:0;top:58%;height:1px;background:rgba(255,255,255,.45);transform:scaleX(0);transform-origin:left;animation:draw 1.9s cubic-bezier(.16,1,.3,1) .3s forwards}
 @keyframes draw{to{transform:scaleX(1)}}
@@ -95,7 +94,7 @@ body.nav-open{overflow:hidden}
 @keyframes fall{0%{transform:translateY(-100%)}60%,100%{transform:translateY(100%)}}
 
 /* 大画面でも行長が伸びすぎないよう内容幅を制限 */
-.sec__head,.about,.msg,.profile,.svc,.works,.flow,.band,.hero__inner,.band-sea__txt,.ft__top,.ft__cp,.ft__note,.sec > .more-wrap{max-width:var(--maxw);margin-left:auto;margin-right:auto}
+.sec__head,.about,.msg,.profile,.svc,.works,.flow,.band,.hero__inner,.band-sea__txt,.ft__top,.ft__cp,.sec > .more-wrap{max-width:var(--maxw);margin-left:auto;margin-right:auto}
 .contact__inner{max-width:var(--maxw);margin:0 auto}
 
 /* message / company */
@@ -217,11 +216,9 @@ body.nav-open{overflow:hidden}
 .ft__logo{font-family:var(--latin);font-size:18px;letter-spacing:.2em;color:#fff}
 .ft__addr{font-size:12px;line-height:2.2;color:rgba(250,249,246,.6);margin-top:18px}
 .ft__cp{font-family:var(--util);font-size:10.5px;letter-spacing:.2em;color:rgba(250,249,246,.45);margin-top:26px}
-.ft__note{font-size:10.5px;line-height:2;color:rgba(250,249,246,.42);margin-top:16px;max-width:60em}
 
-.rv{opacity:0;transform:translateY(34px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
-.rv.in{opacity:1;transform:none}
-.note{background:var(--sand);color:var(--ink);font-family:var(--util);font-size:11px;letter-spacing:.14em;text-align:center;padding:10px 16px;line-height:1.7}
+.js .rv{opacity:0;transform:translateY(34px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+.js .rv.in{opacity:1;transform:none}
 
 /* SVGアニメーション */
 .wave{animation:swell 9s ease-in-out infinite alternate}
@@ -276,10 +273,9 @@ body.nav-open{overflow:hidden}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
-  .rv{opacity:1;transform:none}
+  .rv{opacity:1!important;transform:none!important}
   .hero__horizon{transform:scaleX(1)}
   .hero__eyebrow,.hero__copy span,.hero__lead{opacity:1}
-  .hero__video{display:none}
 }
 </style>
 </head>
@@ -475,13 +471,12 @@ body.nav-open{overflow:hidden}
 </svg>
 
 <!-- 公開時はこの1行を削除してください -->
-<div class="note">不動産開発（3枚スライド）と珊瑚再生事業の画像はファイルに埋め込み済みで、通信なしで表示されます。その他の枠はイラスト（＋読み込めればフリー素材の写真）です。</div>
 
 <header class="hd" id="hd">
-  <a href="#" class="hd__logo"><span>Coral</span><span>Resort</span><span>Management</span></a>
+  <a href="#top" class="hd__logo" data-page="top"><span>Coral</span><span>Resort</span><span>Management</span></a>
   <nav class="hd__nav">
-    <a href="#about">About</a><a href="#service">Service</a><a href="#works">Works</a>
-    <a href="#news">News</a><a href="#recruit">Recruit</a>
+    <a href="#about">About</a><a href="#company" data-page="company">Company</a><a href="#service">Service</a><a href="#works">Works</a>
+    <a href="#news">News</a><a href="#recruit" data-page="recruit">Recruit</a>
     <a href="#contact" class="hd__cta">Contact</a>
   </nav>
   <button class="hd__menu" id="menuBtn" aria-label="メニュー" aria-expanded="false"><i></i>MENU</button>
@@ -493,7 +488,7 @@ body.nav-open{overflow:hidden}
   <a href="#service">Service</a>
   <a href="#works">Works</a>
   <a href="#news">News</a>
-  <a href="#recruit">Recruit</a>
+  <a href="#recruit" data-page="recruit">Recruit</a>
   <a href="#contact" class="drawer__cta">Contact</a>
 </nav>
 
@@ -502,8 +497,6 @@ body.nav-open{overflow:hidden}
 <section class="hero">
   <div class="hero__media">
     <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-reef"/></svg>
-    <iframe class="hero__video" id="heroVideo" data-src="https://www.youtube.com/embed/krMtBzdjTuc?autoplay=1&mute=1&loop=1&playlist=krMtBzdjTuc&controls=0&modestbranding=1&playsinline=1&rel=0"
-      title="沖縄の海（仮映像）" allow="autoplay; encrypted-media" tabindex="-1" loading="lazy"></iframe>
     <div class="hero__mask"></div>
   </div>
   <div class="hero__horizon"></div>
@@ -545,7 +538,7 @@ body.nav-open{overflow:hidden}
     <span class="sec__index">02 ／ Service</span>
     <h2 class="sec__title"><em>Service</em>宿にまつわる仕事を、ひととおり。</h2>
   </div>
-  <div class="svc rv">
+  <div class="svc rv"><!--CMS:SERVICES-->
     <div class="svc__row">
       <p class="svc__en">Housekeeping</p>
       <div>
@@ -596,7 +589,7 @@ body.nav-open{overflow:hidden}
         <img class="shot on" src="assets/img/coral-museum.jpg" alt="沖縄海底美術館とサンゴ移植">
         <span class="cap">沖縄海底美術館</span>
       </div>
-    </div>
+    </div><!--/CMS:SERVICES-->
   </div>
 </section>
 
@@ -606,7 +599,7 @@ body.nav-open{overflow:hidden}
     <span class="sec__index">03 ／ Works</span>
     <h2 class="sec__title sec__title--en">Works</h2>
   </div>
-  <div class="works rv">
+  <div class="works rv"><!--CMS:WORKS-->
     <a href="#" class="work">
       <div class="ph work__img">
         <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
@@ -633,7 +626,7 @@ body.nav-open{overflow:hidden}
       </div>
       <p class="work__meta"><span>Nago</span><span>名護市</span></p>
       <p class="work__name">リエッタ中山</p>
-    </a>
+    </a><!--/CMS:WORKS-->
   </div>
   <p style="margin-top:44px" class="rv"><a href="#" class="more">All works →</a></p>
 </section>
@@ -681,7 +674,7 @@ body.nav-open{overflow:hidden}
       <p class="eyebrow" style="color:var(--sand)">Recruit</p>
       <h2 class="rec__ttl">海のそばで、<br>働きませんか。</h2>
       <p class="rec__txt">未経験から始めたスタッフがほとんどです。清掃スタッフ、フロント、マネージャー候補を募集しています。</p>
-      <p><a href="#" class="more" style="color:#fff">Recruit →</a></p>
+      <p><a href="#recruit" class="more" data-page="recruit" style="color:#fff">Recruit →</a></p>
     </div>
   </div>
 </section>
@@ -741,6 +734,8 @@ body.nav-open{overflow:hidden}
   </div>
 </main>
 
+<main id="page-recruit" class="page" hidden><!--CMS:RECRUIT_PAGE--><!--/CMS:RECRUIT_PAGE--></main>
+
 <footer class="ft">
   <div class="ft__top">
     <div>
@@ -749,12 +744,12 @@ body.nav-open{overflow:hidden}
     </div>
   </div>
   <p class="ft__cp">© 2026 Coral Resort Management Inc.</p>
-  <p class="ft__note">※デザイン検討用モックアップ。イラストはこのファイル内に埋め込まれた仮ビジュアル、写真はフリー素材サービス（LoremFlickr／Flickrのフリーライセンス画像）とYouTube公開映像を仮に読み込んでいます。公開時は自社撮影素材または許諾取得済み素材へ差し替えてください。</p>
 </footer>
 
 <script>
 const hd=document.getElementById('hd');
-addEventListener('scroll',()=>{hd.classList.toggle('solid',scrollY>innerHeight*0.82)},{passive:true});
+function syncHeader(){hd.classList.toggle('solid',pages.top.hidden||scrollY>innerHeight*0.82)}
+addEventListener('scroll',syncHeader,{passive:true});
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
 document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%3)*90+'ms';io.observe(el)});
 /* 不動産開発：3枚のスライド */
@@ -772,36 +767,30 @@ document.querySelectorAll('.slide').forEach(box=>{
     if(dots) dots.children[n].classList.add('on');
   },4200);
 });
-/* ヒーロー動画：PCかつ動きを許可している場合のみ読み込む（スマホは通信量を節約） */
-const v=document.getElementById('heroVideo');
-if(v){
-  const okMotion=!matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const wide=matchMedia('(min-width: 901px)').matches;
-  if(okMotion&&wide){v.addEventListener('load',()=>v.classList.add('on'));v.src=v.dataset.src}
-  else{v.remove()}
-}
 
 /* ページ切り替え（実制作では /company/ など別ページになります） */
-const pages={top:document.getElementById('page-top'),company:document.getElementById('page-company')};
+const pages={top:document.getElementById('page-top'),company:document.getElementById('page-company'),recruit:document.getElementById('page-recruit')};
+const pageFromHash=()=>({'#company':'company','#recruit':'recruit'}[location.hash]||'top');
 function showPage(name,anchor){
   Object.entries(pages).forEach(([k,el])=>{el.hidden=(k!==name)});
   document.body.classList.remove('nav-open');
-  hd.classList.toggle('solid',name!=='top');
+  syncHeader();
   if(anchor){const t=document.getElementById(anchor);if(t){t.scrollIntoView();return}}
   scrollTo(0,0);
 }
 document.querySelectorAll('[data-page]').forEach(el=>{
-  el.addEventListener('click',e=>{e.preventDefault();showPage(el.dataset.page);history.replaceState(null,'',el.dataset.page==='top'?'#top':'#company')});
+  el.addEventListener('click',e=>{e.preventDefault();showPage(el.dataset.page);history.pushState(null,'','#'+el.dataset.page)});
 });
 /* ヘッダーのアンカーはTOPへ戻ってから移動 */
-document.querySelectorAll('.hd__nav a[href^="#"], .drawer a[href^="#"]:not([data-page])').forEach(a=>{
+document.querySelectorAll('.hd__nav a[href^="#"]:not([data-page]), .drawer a[href^="#"]:not([data-page])').forEach(a=>{
   a.addEventListener('click',e=>{
     const id=a.getAttribute('href').slice(1);
-    if(pages.company.hidden) return;
+    if(!pages.top.hidden) return;
     e.preventDefault();showPage('top',id);
   });
 });
-if(location.hash==='#company')showPage('company');
+if(pageFromHash()!=='top')showPage(pageFromHash());
+addEventListener('popstate',()=>showPage(pageFromHash()));
 
 /* モバイルメニュー */
 const btn=document.getElementById('menuBtn'),drawer=document.getElementById('drawer');

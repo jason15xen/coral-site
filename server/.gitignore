@@ -1,0 +1,6 @@
+node_modules/
+data/config.json
+data/uploads/*
+!data/uploads/.gitkeep
+*.log
+data/content.json.bak

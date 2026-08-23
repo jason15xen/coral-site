@@ -1,0 +1,21 @@
+[Unit]
+Description=Coral CMS (Node/Express) for coral-site
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/coral/server
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=3
+Environment=NODE_ENV=production
+Environment=PORT=3000
+# COOKIE_SECURE=1 once the site is served over HTTPS
+Environment=COOKIE_SECURE=0
+# Set a stable session secret so logins survive restarts:
+Environment=SESSION_SECRET=change-me-to-a-long-random-string
+User=www-data
+Group=www-data
+
+[Install]
+WantedBy=multi-user.target

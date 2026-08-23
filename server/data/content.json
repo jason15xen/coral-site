@@ -1,0 +1,94 @@
+{
+  "services": [
+    {
+      "id": "s1",
+      "order": 1,
+      "en": "Housekeeping",
+      "jp": "客室清掃・ハウスキーピング受託",
+      "desc": "ホテル・コンドミニアム・貸別荘の客室清掃を受託。繁忙期の人員確保、清掃品質のチェック体制、リネンの手配までを一括で担います。",
+      "scene": "sc-room",
+      "caption": "",
+      "images": [
+        { "src": "assets/img/service-housekeeping.jpg", "alt": "客室清掃・ハウスキーピング" }
+      ]
+    },
+    {
+      "id": "s2",
+      "order": 2,
+      "en": "Operation",
+      "jp": "宿泊施設の運営受託",
+      "desc": "フロント業務、予約・OTA運用、料金設定、日々の収支管理まで。オーナー様に代わって、宿を一棟まるごと運営します。",
+      "scene": "sc-villa",
+      "caption": "",
+      "images": [
+        { "src": "assets/img/service-operation.jpg", "alt": "宿泊施設の運営受託" }
+      ]
+    },
+    {
+      "id": "s3",
+      "order": 3,
+      "en": "Development",
+      "jp": "不動産開発",
+      "desc": "土地の個性を読み解くところから、宿泊施設の企画・設計・開業までを一貫して手がけます。地形や岩をそのまま活かした、その場所にしか建たない宿をつくります。",
+      "scene": "sc-villa",
+      "caption": "開発計画イメージ",
+      "images": [
+        { "src": "assets/img/development-01.jpg", "alt": "開発計画 外観" },
+        { "src": "assets/img/development-02.jpg", "alt": "開発計画 ラウンジ" },
+        { "src": "assets/img/development-03.jpg", "alt": "開発計画 バスルーム" }
+      ]
+    },
+    {
+      "id": "s4",
+      "order": 4,
+      "en": "Coral Regeneration",
+      "jp": "珊瑚再生事業（沖縄海底美術館）",
+      "desc": "サンゴの苗を育て、海底に移植し、その生育を見守る取り組みです。作品としての構造物とサンゴが一体になった「沖縄海底美術館」を、地域の海とともに育てています。",
+      "scene": "sc-coral",
+      "caption": "沖縄海底美術館",
+      "images": [
+        { "src": "assets/img/coral-museum.jpg", "alt": "沖縄海底美術館とサンゴ移植" }
+      ]
+    }
+  ],
+  "works": [
+    {
+      "id": "w1",
+      "order": 1,
+      "name": "ヨーンヤード古宇利島",
+      "metaEn": "Kouri Island",
+      "metaJp": "今帰仁村",
+      "scene": "sc-villa",
+      "url": "#",
+      "image": "assets/img/works-yawnyard-kouri.jpg"
+    },
+    {
+      "id": "w2",
+      "order": 2,
+      "name": "プールヴィラ天羽",
+      "metaEn": "Unten",
+      "metaJp": "今帰仁村",
+      "scene": "sc-pool",
+      "url": "#",
+      "image": "assets/img/works-poolvilla-amaha.jpg"
+    },
+    {
+      "id": "w3",
+      "order": 3,
+      "name": "リエッタ中山",
+      "metaEn": "Nago",
+      "metaJp": "名護市",
+      "scene": "sc-building",
+      "url": "#",
+      "image": "assets/img/works-lieta-nakayama.jpg"
+    }
+  ],
+  "recruit": {
+    "headEyebrow": "Recruit",
+    "headTtl": "海のそばで、<br>働きませんか。",
+    "headEn": "Work by the sea",
+    "headJp": "スタッフ募集",
+    "headImg": "assets/img/message-hero.jpg",
+    "bodyHtml": "<p>（このページの文言は後ほど差し替えます。）</p><p>未経験から始めたスタッフがほとんどです。清掃スタッフ、フロント、マネージャー候補を募集しています。ご応募・お問い合わせをお待ちしています。</p>"
+  }
+}
