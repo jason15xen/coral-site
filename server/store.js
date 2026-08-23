@@ -36,6 +36,7 @@ function getContent() {
   c.services = (c.services || []).sort((a, b) => (a.order || 0) - (b.order || 0));
   c.works = (c.works || []).sort((a, b) => (a.order || 0) - (b.order || 0));
   c.recruit = c.recruit || {};
+  c.settings = c.settings || {};
   return c;
 }
 

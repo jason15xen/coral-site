@@ -61,6 +61,7 @@ app.get('/', (req, res) => {
   html = injectBetween(html, 'SERVICES', render.servicesHtml(c.services));
   html = injectBetween(html, 'WORKS', render.worksHtml(c.works));
   html = injectBetween(html, 'RECRUIT_PAGE', render.recruitPageHtml(c.recruit));
+  html = injectBetween(html, 'CONTACT', render.contactBtnHtml(c.settings));
   res.type('html').send(html);
 });
 app.get('/api/content', (req, res) => res.json(store.getContent()));
@@ -209,6 +210,23 @@ app.post('/admin/work/:id/delete', requireAuth, (req, res) => {
   const gone = c.works.find(w => w.id === req.params.id);
   if (gone) removeUpload(gone.image);
   c.works = c.works.filter(w => w.id !== req.params.id);
+  store.saveContent(c);
+  res.redirect('/admin?ok=1');
+});
+
+// ---- Settings (contact) ----
+app.get('/admin/settings', requireAuth, (req, res) => res.type('html').send(views.settingsForm(store.getContent().settings)));
+app.post('/admin/settings', requireAuth, (req, res) => {
+  const email = (req.body.contactEmail || '').trim();
+  const phone = (req.body.contactPhone || '').trim();
+  if (email && !/^\S+@\S+\.\S+$/.test(email)) {
+    return res.status(400).type('html').send(views.settingsForm({ contactEmail: email, contactPhone: phone }, 'メールアドレスの形式が正しくありません。'));
+  }
+  if (phone && !/^[+\d][\d\s\-()]{5,}$/.test(phone)) {
+    return res.status(400).type('html').send(views.settingsForm({ contactEmail: email, contactPhone: phone }, '電話番号の形式が正しくありません。'));
+  }
+  const c = store.getContent();
+  c.settings = { ...c.settings, contactEmail: email, contactPhone: phone };
   store.saveContent(c);
   res.redirect('/admin?ok=1');
 });

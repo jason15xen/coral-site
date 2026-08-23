@@ -79,6 +79,9 @@ function dashboard(content, flash) {
     ${svc || '<p class="muted">まだ項目がありません。</p>'}
     <h2>Works（実績）<a class="btn sm" style="float:right" href="/admin/work/new">＋ 追加</a></h2>
     ${wk || '<p class="muted">まだ項目がありません。</p>'}
+    <h2>お問い合わせ設定</h2>
+    <div class="card"><div class="grow"><b>連絡先（メール・電話）</b><small>設定するとサイトの「お問い合わせ」ボタンが有効になります</small></div>
+      <a class="btn ghost sm" href="/admin/settings">編集</a></div>
     <h2>Recruit（採用ページ）</h2>
     <div class="card"><div class="grow"><b>採用ページの文言・見出し</b><small>クリックで表示されるページの内容</small></div>
       <a class="btn ghost sm" href="/admin/recruit">編集</a></div>
@@ -152,4 +155,18 @@ function recruitForm(r, scenes) {
     </form>`);
 }
 
-module.exports = { layout, loginPage, dashboard, serviceForm, workForm, recruitForm };
+function settingsForm(st, err) {
+  st = st || {};
+  return layout('お問い合わせ設定', `
+    <p><a href="/admin">← 戻る</a></p>
+    <h1>お問い合わせ設定</h1>
+    ${err ? `<div class="err">${esc(err)}</div>` : ''}
+    <p class="muted">メールアドレスを設定すると「お問い合わせ」ボタンがメール作成画面を開くようになります。メール未設定で電話番号のみの場合は電話発信リンクになります。</p>
+    <form method="post" action="/admin/settings">
+      <label>お問い合わせ用メールアドレス</label><input type="text" name="contactEmail" value="${esc(st.contactEmail)}" placeholder="info@example.co.jp">
+      <label>電話番号（任意）</label><input type="text" name="contactPhone" value="${esc(st.contactPhone)}" placeholder="0980-00-0000">
+      <div class="row" style="margin-top:22px"><button class="btn" type="submit">保存</button><a class="btn ghost" href="/admin">キャンセル</a></div>
+    </form>`);
+}
+
+module.exports = { layout, loginPage, dashboard, serviceForm, workForm, recruitForm, settingsForm };

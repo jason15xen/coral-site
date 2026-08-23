@@ -86,4 +86,15 @@ function recruitPageHtml(r) {
   </section>`;
 }
 
-module.exports = { esc, escBr, servicesHtml, worksHtml, recruitPageHtml };
+// Contact button: mailto/tel when configured in admin settings, else inert placeholder.
+function contactBtnHtml(settings) {
+  settings = settings || {};
+  const email = (settings.contactEmail || '').trim();
+  const phone = (settings.contactPhone || '').trim();
+  let href = '#';
+  if (email) href = 'mailto:' + email;
+  else if (phone) href = 'tel:' + phone.replace(/[^+\d]/g, '');
+  return `<a href="${esc(href)}" class="contact__btn">お問い合わせ</a>`;
+}
+
+module.exports = { esc, escBr, servicesHtml, worksHtml, recruitPageHtml, contactBtnHtml };
