@@ -64,6 +64,27 @@ function worksHtml(list) {
   return '\n' + list.map(workCard).join('\n') + '\n    ';
 }
 
+// Full works list page ("All works"): every work from the CMS.
+function worksPageHtml(list) {
+  return `
+  <section class="page-head">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="Works">
+    <div class="page-head__mask"></div>
+    <div class="page-head__txt">
+      <p class="eyebrow" style="color:var(--sand)">Works</p>
+      <h1 class="page-head__ttl">実績一覧</h1>
+      <p class="page-head__en">All works</p>
+      <p class="page-head__jp">これまでに手がけた施設</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="works rv">
+${list.map(workCard).join('\n')}
+    </div>
+    <p style="margin-top:44px"><a href="#top" class="more" data-page="top">← Back to top</a></p>
+  </section>`;
+}
+
 // Recruit page (its own in-page "page", styled like the Company page-head).
 function recruitPageHtml(r) {
   r = r || {};
@@ -151,4 +172,4 @@ function contactFormPageHtml(settings) {
   </script>`;
 }
 
-module.exports = { esc, escBr, servicesHtml, worksHtml, recruitPageHtml, contactBtnHtml, contactFormPageHtml };
+module.exports = { esc, escBr, servicesHtml, worksHtml, worksPageHtml, recruitPageHtml, contactBtnHtml, contactFormPageHtml };

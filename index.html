@@ -639,7 +639,7 @@ body.nav-open{overflow:hidden}
       <p class="work__name">リエッタ中山</p>
     </a><!--/CMS:WORKS-->
   </div>
-  <p style="margin-top:44px" class="rv"><a href="#" class="more">All works →</a></p>
+  <p style="margin-top:44px" class="rv"><a href="#workslist" class="more" data-page="workslist">All works →</a></p>
 </section>
 
 <!-- SEA BAND -->
@@ -763,6 +763,47 @@ body.nav-open{overflow:hidden}
     </div>
   </section><!--/CMS:RECRUIT_PAGE--></main>
 
+<main id="page-workslist" class="page" hidden><!--CMS:WORKS_PAGE-->
+  <section class="page-head">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="Works">
+    <div class="page-head__mask"></div>
+    <div class="page-head__txt">
+      <p class="eyebrow" style="color:var(--sand)">Works</p>
+      <h1 class="page-head__ttl">実績一覧</h1>
+      <p class="page-head__en">All works</p>
+      <p class="page-head__jp">これまでに手がけた施設</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="works rv">
+      <a href="#" class="work">
+        <div class="ph work__img">
+          <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
+          <img class="shot on" src="assets/img/works-yawnyard-kouri.jpg" alt="ヨーンヤード古宇利島">
+        </div>
+        <p class="work__meta"><span>Kouri Island</span><span>今帰仁村</span></p>
+        <p class="work__name">ヨーンヤード古宇利島</p>
+      </a>
+      <a href="#" class="work">
+        <div class="ph work__img">
+          <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-pool"/></svg>
+          <img class="shot on" src="assets/img/works-poolvilla-amaha.jpg" alt="プールヴィラ天羽">
+        </div>
+        <p class="work__meta"><span>Unten</span><span>今帰仁村</span></p>
+        <p class="work__name">プールヴィラ天羽</p>
+      </a>
+      <a href="#" class="work">
+        <div class="ph work__img">
+          <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-building"/></svg>
+          <img class="shot on" src="assets/img/works-lieta-nakayama.jpg" alt="リエッタ中山">
+        </div>
+        <p class="work__meta"><span>Nago</span><span>名護市</span></p>
+        <p class="work__name">リエッタ中山</p>
+      </a>
+    </div>
+    <p style="margin-top:44px"><a href="#top" class="more" data-page="top">← Back to top</a></p>
+  </section><!--/CMS:WORKS_PAGE--></main>
+
 <main id="page-contactform" class="page" hidden><!--CMS:CONTACT_PAGE-->
   <section class="page-head">
     <img class="page-head__img" src="assets/img/message-hero.jpg" alt="お問い合わせ">
@@ -841,8 +882,8 @@ document.querySelectorAll('.slide').forEach(box=>{
 });
 
 /* ページ切り替え（実制作では /company/ など別ページになります） */
-const pages={top:document.getElementById('page-top'),company:document.getElementById('page-company'),recruit:document.getElementById('page-recruit'),contactform:document.getElementById('page-contactform')};
-const pageFromHash=()=>({'#company':'company','#recruit':'recruit','#contactform':'contactform'}[location.hash]||'top');
+const pages={top:document.getElementById('page-top'),company:document.getElementById('page-company'),recruit:document.getElementById('page-recruit'),contactform:document.getElementById('page-contactform'),workslist:document.getElementById('page-workslist')};
+const pageFromHash=()=>({'#company':'company','#recruit':'recruit','#contactform':'contactform','#workslist':'workslist'}[location.hash]||'top');
 function showPage(name,anchor){
   Object.entries(pages).forEach(([k,el])=>{el.hidden=(k!==name)});
   document.body.classList.remove('nav-open');
