@@ -1,0 +1,16 @@
+.git
+.gitignore
+deploy
+Dockerfile
+docker-compose.yml
+.dockerignore
+README.md
+server/node_modules
+server/README-cms.md
+# never bake local credentials / user data into the image
+server/data/config.json
+server/data/inquiries.json
+server/data/content.json.bak
+server/data/uploads
+assets/uploads
+*.log

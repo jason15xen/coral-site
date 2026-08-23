@@ -285,4 +285,5 @@ app.use((err, req, res, next) => {
   res.status(500).type('html').send('<p style="font-family:sans-serif;padding:24px">エラーが発生しました。<a href="javascript:history.back()">← 戻る</a></p>');
 });
 
-app.listen(PORT, '127.0.0.1', () => console.log(`Coral CMS listening on http://127.0.0.1:${PORT}`));
+const HOST = process.env.HOST || '127.0.0.1';   // Docker sets HOST=0.0.0.0
+app.listen(PORT, HOST, () => console.log(`Coral CMS listening on http://${HOST}:${PORT}`));
