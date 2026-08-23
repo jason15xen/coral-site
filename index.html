@@ -795,6 +795,7 @@ body.nav-open{overflow:hidden}
   </section>
   <script>
   (function(){var f=document.getElementById('cform');if(!f)return;
+  if(location.protocol==='file:'){var b0=f.querySelector('button'),m0=document.getElementById('cformMsg');b0.disabled=true;m0.textContent='※プレビュー表示のため送信できません。公開サイト上でご利用ください。';return;}
   f.addEventListener('submit',function(e){e.preventDefault();
     var m=document.getElementById('cformMsg'),b=f.querySelector('button');
     b.disabled=true;m.textContent='送信中…';
@@ -803,7 +804,7 @@ body.nav-open{overflow:hidden}
     .then(function(r){return r.json()})
     .then(function(j){if(j.ok){f.reset();m.textContent='送信しました。担当者よりご連絡いたします。';}
       else{m.textContent=j.error||'送信に失敗しました。時間をおいてお試しください。';b.disabled=false;}})
-    .catch(function(){m.textContent='送信に失敗しました。通信環境をご確認ください。';b.disabled=false;});
+    .catch(function(){m.textContent='サーバーに接続できませんでした。時間をおいて再度お試しください。';b.disabled=false;});
   });})();
   </script><!--/CMS:CONTACT_PAGE--></main>
 
