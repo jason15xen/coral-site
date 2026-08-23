@@ -22,6 +22,7 @@ const app = express();
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: '32kb' }));
 
 // ---- uploads ----
 const storage = multer.diskStorage({
@@ -62,9 +63,32 @@ app.get('/', (req, res) => {
   html = injectBetween(html, 'WORKS', render.worksHtml(c.works));
   html = injectBetween(html, 'RECRUIT_PAGE', render.recruitPageHtml(c.recruit));
   html = injectBetween(html, 'CONTACT', render.contactBtnHtml(c.settings));
+  html = injectBetween(html, 'CONTACT_PAGE', render.contactFormPageHtml(c.settings));
   res.type('html').send(html);
 });
 app.get('/api/content', (req, res) => res.json(store.getContent()));
+
+// ---- public inquiry endpoint (contact form) ----
+const inquiryHits = new Map();
+app.post('/api/inquiry', (req, res) => {
+  const h = inquiryHits.get(req.ip);
+  if (h && Date.now() - h.ts < 10 * 60 * 1000 && h.count >= 5) {
+    return res.status(429).json({ ok: false, error: '送信が多すぎます。しばらくしてからお試しください。' });
+  }
+  const b = req.body || {};
+  if ((b.website || '').trim()) return res.json({ ok: true });   // honeypot: pretend success
+  const name = String(b.name || '').trim().slice(0, 100);
+  const email = String(b.email || '').trim().slice(0, 200);
+  const phone = String(b.phone || '').trim().slice(0, 40);
+  const message = String(b.message || '').trim().slice(0, 4000);
+  if (!name || !message || !/^\S+@\S+\.\S+$/.test(email)) {
+    return res.status(400).json({ ok: false, error: 'お名前・メールアドレス・お問い合わせ内容をご確認ください。' });
+  }
+  if (!h || Date.now() - h.ts >= 10 * 60 * 1000) inquiryHits.set(req.ip, { count: 1, ts: Date.now() });
+  else h.count++;
+  store.addInquiry({ id: crypto.randomUUID(), at: new Date().toISOString(), name, email, phone, message });
+  res.json({ ok: true });
+});
 
 // ================= AUTH =================
 app.use(session({
@@ -105,7 +129,7 @@ function requireAuth(req, res, next) {
 }
 
 // ================= ADMIN =================
-app.get('/admin', requireAuth, (req, res) => res.type('html').send(views.dashboard(store.getContent(), req.query.ok && '保存しました。')));
+app.get('/admin', requireAuth, (req, res) => res.type('html').send(views.dashboard(store.getContent(), req.query.ok && '保存しました。', store.getInquiries().length)));
 
 // ---- Service ----
 app.get('/admin/service/new', requireAuth, (req, res) => res.type('html').send(views.serviceForm(null, store.SCENES, true)));
@@ -212,6 +236,13 @@ app.post('/admin/work/:id/delete', requireAuth, (req, res) => {
   c.works = c.works.filter(w => w.id !== req.params.id);
   store.saveContent(c);
   res.redirect('/admin?ok=1');
+});
+
+// ---- Inquiries (admin inbox) ----
+app.get('/admin/inquiries', requireAuth, (req, res) => res.type('html').send(views.inquiriesList(store.getInquiries())));
+app.post('/admin/inquiries/:id/delete', requireAuth, (req, res) => {
+  store.deleteInquiry(req.params.id);
+  res.redirect('/admin/inquiries');
 });
 
 // ---- Settings (contact) ----

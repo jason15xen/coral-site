@@ -56,7 +56,7 @@ ${error ? `<div class="err">${esc(error)}</div>` : ''}
 <button type="submit">ログイン</button></form></body></html>`;
 }
 
-function dashboard(content, flash) {
+function dashboard(content, flash, inquiryCount) {
   const svc = content.services.map(s => `
     <div class="card">
       ${s.images && s.images[0] ? `<img src="/${esc(s.images[0].src)}" alt="">` : '<img alt="">'}
@@ -79,6 +79,8 @@ function dashboard(content, flash) {
     ${svc || '<p class="muted">まだ項目がありません。</p>'}
     <h2>Works（実績）<a class="btn sm" style="float:right" href="/admin/work/new">＋ 追加</a></h2>
     ${wk || '<p class="muted">まだ項目がありません。</p>'}
+    <h2>お問い合わせ受信箱${typeof inquiryCount==='number' ? `（${inquiryCount}件）` : ''}<a class="btn sm" style="float:right" href="/admin/inquiries">開く</a></h2>
+    <div class="card"><div class="grow"><b>フォームからのお問い合わせ</b><small>サイトの「お問い合わせ」フォームで送信された内容が届きます</small></div></div>
     <h2>お問い合わせ設定</h2>
     <div class="card"><div class="grow"><b>連絡先（メール・電話）</b><small>設定するとサイトの「お問い合わせ」ボタンが有効になります</small></div>
       <a class="btn ghost sm" href="/admin/settings">編集</a></div>
@@ -155,6 +157,23 @@ function recruitForm(r, scenes) {
     </form>`);
 }
 
+function inquiriesList(list) {
+  const rows = list.map(q => `
+    <div class="card" style="align-items:flex-start">
+      <div class="grow">
+        <b>${esc(q.name)}</b>
+        <small>${esc((q.at || '').replace('T', ' ').slice(0, 16))} · <a href="mailto:${esc(q.email)}">${esc(q.email)}</a>${q.phone ? ' · ' + esc(q.phone) : ''}</small>
+        <p style="margin:8px 0 0;white-space:pre-wrap;font-size:14px">${esc(q.message)}</p>
+      </div>
+      <form method="post" action="/admin/inquiries/${esc(q.id)}/delete" onsubmit="return confirm('この問い合わせを削除しますか？')"><button class="btn danger sm">削除</button></form>
+    </div>`).join('');
+  return layout('お問い合わせ受信箱', `
+    <p><a href="/admin">← 戻る</a></p>
+    <h1>お問い合わせ受信箱</h1>
+    ${rows || '<p class="muted">まだお問い合わせはありません。</p>'}
+  `);
+}
+
 function settingsForm(st, err) {
   st = st || {};
   return layout('お問い合わせ設定', `
@@ -169,4 +188,4 @@ function settingsForm(st, err) {
     </form>`);
 }
 
-module.exports = { layout, loginPage, dashboard, serviceForm, workForm, recruitForm, settingsForm };
+module.exports = { layout, loginPage, dashboard, serviceForm, workForm, recruitForm, settingsForm, inquiriesList };

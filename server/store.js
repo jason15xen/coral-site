@@ -6,6 +6,7 @@ const crypto = require('crypto');
 const DATA_DIR = path.join(__dirname, 'data');
 const CONTENT_FILE = path.join(DATA_DIR, 'content.json');
 const CONFIG_FILE = path.join(DATA_DIR, 'config.json');
+const INQUIRIES_FILE = path.join(DATA_DIR, 'inquiries.json');
 
 // Illustration scenes available in index.html (<symbol id="sc-...">)
 const SCENES = ['sc-reef', 'sc-room', 'sc-villa', 'sc-pool', 'sc-building', 'sc-coral', 'sc-staff', 'sc-bridge', 'sc-abstract'];
@@ -94,8 +95,22 @@ function ensurePasswordFromEnv() {
   return false;
 }
 
+// ---------- inquiries (contact form submissions) ----------
+function getInquiries() {
+  return readJson(INQUIRIES_FILE, []);
+}
+function addInquiry(q) {
+  const list = getInquiries();
+  list.unshift(q);
+  writeJson(INQUIRIES_FILE, list.slice(0, 500));   // cap: keep newest 500
+}
+function deleteInquiry(id) {
+  writeJson(INQUIRIES_FILE, getInquiries().filter(x => x.id !== id));
+}
+
 module.exports = {
   SCENES, DATA_DIR,
   getContent, saveContent, nextId, nextOrder,
   setPassword, verifyPassword, hasPassword, ensurePasswordFromEnv,
+  getInquiries, addInquiry, deleteInquiry,
 };

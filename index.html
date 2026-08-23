@@ -211,6 +211,16 @@ body.nav-open{overflow:hidden}
 .contact__txt{font-size:13px;letter-spacing:.1em;color:rgba(255,255,255,.82);margin-bottom:40px}
 .contact__btn{display:inline-block;border:1px solid rgba(255,255,255,.55);padding:20px 62px;font-family:var(--util);font-size:12px;letter-spacing:.3em;text-transform:uppercase;transition:background .5s,border-color .5s,color .5s}
 @media(hover:hover){.contact__btn:hover{background:var(--sand);border-color:var(--sand);color:var(--ink)}}
+.cform{max-width:640px}
+.cform label{display:block;font-family:var(--util);font-size:12px;letter-spacing:.18em;margin:26px 0 8px}
+.cform input,.cform textarea{width:100%;padding:14px 16px;border:1px solid var(--line);background:#fff;font:inherit;font-size:15px}
+.cform textarea{min-height:160px;resize:vertical}
+.cform button{margin-top:30px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:16px 54px;font-family:var(--util);font-size:12px;letter-spacing:.3em;cursor:pointer;transition:background .4s,border-color .4s}
+@media(hover:hover){.cform button:hover{background:var(--sand);border-color:var(--sand)}}
+.cform button:disabled{opacity:.5;cursor:default}
+.cform .cform__msg{margin-top:20px;font-size:14px}
+.cform .hp{position:absolute;left:-9999px;height:1px;width:1px;overflow:hidden}
+.cform__alt{margin-top:30px;font-size:14px}
 
 .ft{background:var(--ink);color:rgba(250,249,246,.8);padding:clamp(52px,8vw,84px) var(--gut) 34px}
 .ft__top{padding-bottom:36px;border-bottom:1px solid rgba(250,249,246,.14)}
@@ -688,7 +698,7 @@ body.nav-open{overflow:hidden}
     <p class="eyebrow" style="color:var(--sand)">Contact</p>
     <h2 class="contact__ttl">その宿の運営、<br>お預かりできるかもしれません。</h2>
     <p class="contact__txt">清掃だけ、繁忙期だけのご相談も歓迎です。</p>
-    <!--CMS:CONTACT--><a href="#" class="contact__btn">お問い合わせ</a><!--/CMS:CONTACT-->
+    <!--CMS:CONTACT--><a href="#contactform" class="contact__btn" data-page="contactform">お問い合わせ</a><!--/CMS:CONTACT-->
   </div>
 </section>
 
@@ -753,6 +763,50 @@ body.nav-open{overflow:hidden}
     </div>
   </section><!--/CMS:RECRUIT_PAGE--></main>
 
+<main id="page-contactform" class="page" hidden><!--CMS:CONTACT_PAGE-->
+  <section class="page-head">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="お問い合わせ">
+    <div class="page-head__mask"></div>
+    <div class="page-head__txt">
+      <p class="eyebrow" style="color:var(--sand)">Contact</p>
+      <h1 class="page-head__ttl">お問い合わせ</h1>
+      <p class="page-head__en">Get in touch</p>
+      <p class="page-head__jp">運営・清掃のご相談、採用のご応募など、お気軽にどうぞ。</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="msg rv">
+      <form class="cform" id="cform" method="post" action="/api/inquiry">
+        <label for="cf-name">お名前 <span aria-hidden="true">*</span></label>
+        <input id="cf-name" name="name" required maxlength="100" autocomplete="name">
+        <label for="cf-email">メールアドレス <span aria-hidden="true">*</span></label>
+        <input id="cf-email" type="email" name="email" required maxlength="200" autocomplete="email">
+        <label for="cf-phone">電話番号（任意）</label>
+        <input id="cf-phone" name="phone" maxlength="40" autocomplete="tel">
+        <label for="cf-msg">お問い合わせ内容 <span aria-hidden="true">*</span></label>
+        <textarea id="cf-msg" name="message" required maxlength="4000"></textarea>
+        <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit">送信する</button>
+        <p class="cform__msg" id="cformMsg" aria-live="polite"></p>
+      </form>
+      
+      <p style="margin-top:36px"><a href="#top" class="more" data-page="top">← Back to top</a></p>
+    </div>
+  </section>
+  <script>
+  (function(){var f=document.getElementById('cform');if(!f)return;
+  f.addEventListener('submit',function(e){e.preventDefault();
+    var m=document.getElementById('cformMsg'),b=f.querySelector('button');
+    b.disabled=true;m.textContent='送信中…';
+    fetch('/api/inquiry',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(Object.fromEntries(new FormData(f)))})
+    .then(function(r){return r.json()})
+    .then(function(j){if(j.ok){f.reset();m.textContent='送信しました。担当者よりご連絡いたします。';}
+      else{m.textContent=j.error||'送信に失敗しました。時間をおいてお試しください。';b.disabled=false;}})
+    .catch(function(){m.textContent='送信に失敗しました。通信環境をご確認ください。';b.disabled=false;});
+  });})();
+  </script><!--/CMS:CONTACT_PAGE--></main>
+
 <footer class="ft">
   <div class="ft__top">
     <div>
@@ -786,8 +840,8 @@ document.querySelectorAll('.slide').forEach(box=>{
 });
 
 /* ページ切り替え（実制作では /company/ など別ページになります） */
-const pages={top:document.getElementById('page-top'),company:document.getElementById('page-company'),recruit:document.getElementById('page-recruit')};
-const pageFromHash=()=>({'#company':'company','#recruit':'recruit'}[location.hash]||'top');
+const pages={top:document.getElementById('page-top'),company:document.getElementById('page-company'),recruit:document.getElementById('page-recruit'),contactform:document.getElementById('page-contactform')};
+const pageFromHash=()=>({'#company':'company','#recruit':'recruit','#contactform':'contactform'}[location.hash]||'top');
 function showPage(name,anchor){
   Object.entries(pages).forEach(([k,el])=>{el.hidden=(k!==name)});
   document.body.classList.remove('nav-open');

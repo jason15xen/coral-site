@@ -86,15 +86,68 @@ function recruitPageHtml(r) {
   </section>`;
 }
 
-// Contact button: mailto/tel when configured in admin settings, else inert placeholder.
+// Contact button: opens the on-site inquiry form page.
 function contactBtnHtml(settings) {
+  return `<a href="#contactform" class="contact__btn" data-page="contactform">お問い合わせ</a>`;
+}
+
+// The inquiry form page (in-page "page" like Company/Recruit). Submissions POST
+// to /api/inquiry and are stored for the admin; email/phone from settings are
+// offered as alternative contact routes when configured.
+function contactFormPageHtml(settings) {
   settings = settings || {};
   const email = (settings.contactEmail || '').trim();
   const phone = (settings.contactPhone || '').trim();
-  let href = '#';
-  if (email) href = 'mailto:' + email;
-  else if (phone) href = 'tel:' + phone.replace(/[^+\d]/g, '');
-  return `<a href="${esc(href)}" class="contact__btn">お問い合わせ</a>`;
+  let alt = '';
+  if (email || phone) {
+    const parts = [];
+    if (phone) parts.push(`<a href="tel:${esc(phone.replace(/[^+\d]/g, ''))}">${esc(phone)}</a>`);
+    if (email) parts.push(`<a href="mailto:${esc(email)}">${esc(email)}</a>`);
+    alt = `<p class="cform__alt">お急ぎの場合はこちらへ：${parts.join(' ／ ')}</p>`;
+  }
+  return `
+  <section class="page-head">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="お問い合わせ">
+    <div class="page-head__mask"></div>
+    <div class="page-head__txt">
+      <p class="eyebrow" style="color:var(--sand)">Contact</p>
+      <h1 class="page-head__ttl">お問い合わせ</h1>
+      <p class="page-head__en">Get in touch</p>
+      <p class="page-head__jp">運営・清掃のご相談、採用のご応募など、お気軽にどうぞ。</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="msg rv">
+      <form class="cform" id="cform" method="post" action="/api/inquiry">
+        <label for="cf-name">お名前 <span aria-hidden="true">*</span></label>
+        <input id="cf-name" name="name" required maxlength="100" autocomplete="name">
+        <label for="cf-email">メールアドレス <span aria-hidden="true">*</span></label>
+        <input id="cf-email" type="email" name="email" required maxlength="200" autocomplete="email">
+        <label for="cf-phone">電話番号（任意）</label>
+        <input id="cf-phone" name="phone" maxlength="40" autocomplete="tel">
+        <label for="cf-msg">お問い合わせ内容 <span aria-hidden="true">*</span></label>
+        <textarea id="cf-msg" name="message" required maxlength="4000"></textarea>
+        <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit">送信する</button>
+        <p class="cform__msg" id="cformMsg" aria-live="polite"></p>
+      </form>
+      ${alt}
+      <p style="margin-top:36px"><a href="#top" class="more" data-page="top">← Back to top</a></p>
+    </div>
+  </section>
+  <script>
+  (function(){var f=document.getElementById('cform');if(!f)return;
+  f.addEventListener('submit',function(e){e.preventDefault();
+    var m=document.getElementById('cformMsg'),b=f.querySelector('button');
+    b.disabled=true;m.textContent='送信中…';
+    fetch('/api/inquiry',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(Object.fromEntries(new FormData(f)))})
+    .then(function(r){return r.json()})
+    .then(function(j){if(j.ok){f.reset();m.textContent='送信しました。担当者よりご連絡いたします。';}
+      else{m.textContent=j.error||'送信に失敗しました。時間をおいてお試しください。';b.disabled=false;}})
+    .catch(function(){m.textContent='送信に失敗しました。通信環境をご確認ください。';b.disabled=false;});
+  });})();
+  </script>`;
 }
 
-module.exports = { esc, escBr, servicesHtml, worksHtml, recruitPageHtml, contactBtnHtml };
+module.exports = { esc, escBr, servicesHtml, worksHtml, recruitPageHtml, contactBtnHtml, contactFormPageHtml };
