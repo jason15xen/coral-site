@@ -19,6 +19,9 @@ const PORT = process.env.PORT || 3000;
 store.ensurePasswordFromEnv();
 
 const app = express();
+views.setUnread(() => store.unreadInquiries());
+const FLASH = { saved: '保存しました。', deleted: '削除しました。', moved: '並び順を変更しました。' };
+const flashOf = req => FLASH[req.query.ok] || '';
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
 app.use(express.urlencoded({ extended: false }));
@@ -137,7 +140,34 @@ function requireAuth(req, res, next) {
 }
 
 // ================= ADMIN =================
-app.get('/admin', requireAuth, (req, res) => res.type('html').send(views.dashboard(store.getContent(), req.query.ok && '保存しました。', store.getInquiries().length)));
+app.get('/admin', requireAuth, (req, res) => {
+  const inq = store.getInquiries();
+  res.type('html').send(views.dashboard({ content: store.getContent(), unread: inq.filter(q => !q.read).length, total: inq.length, recent: inq.slice(0, 3), flash: flashOf(req) }));
+});
+
+// ---- section list pages + reordering ----
+app.get('/admin/services', requireAuth, (req, res) => res.type('html').send(views.listServices(store.getContent(), flashOf(req))));
+app.get('/admin/works', requireAuth, (req, res) => res.type('html').send(views.listWorks(store.getContent(), flashOf(req))));
+app.get('/admin/news', requireAuth, (req, res) => res.type('html').send(views.listNews(store.getContent(), flashOf(req))));
+function moveItem(list, id, dir) {
+  const sorted = [...list].sort((a, b) => (a.order || 0) - (b.order || 0));
+  const i = sorted.findIndex(x => x.id === id);
+  const j = dir === 'up' ? i - 1 : i + 1;
+  if (i < 0 || j < 0 || j >= sorted.length) return false;
+  sorted.forEach((x, k) => { x.order = k + 1; });          // normalise 1..n
+  const t = sorted[i].order; sorted[i].order = sorted[j].order; sorted[j].order = t;
+  return true;
+}
+app.post('/admin/service/:id/move', requireAuth, (req, res) => {
+  const c = store.getContent();
+  if (moveItem(c.services, req.params.id, req.body.dir)) store.saveContent(c);
+  res.redirect('/admin/services?ok=moved');
+});
+app.post('/admin/work/:id/move', requireAuth, (req, res) => {
+  const c = store.getContent();
+  if (moveItem(c.works, req.params.id, req.body.dir)) store.saveContent(c);
+  res.redirect('/admin/works?ok=moved');
+});
 
 // ---- Service ----
 app.get('/admin/service/new', requireAuth, (req, res) => res.type('html').send(views.serviceForm(null, store.SCENES, true)));
@@ -163,7 +193,7 @@ app.post('/admin/service', requireAuth, upload.array('images', 12), (req, res) =
   const it = { id: store.nextId('s', c.services), ...f, order: parseInt(req.body.order, 10) || store.nextOrder(c.services) };
   it.images = (req.files || []).map(file => ({ src: relUpload(file), alt: f.jp || f.en }));
   c.services.push(it); store.saveContent(c);
-  res.redirect('/admin?ok=1');
+  res.redirect('/admin/services?ok=saved');
 });
 app.post('/admin/service/:id', requireAuth, upload.array('images', 12), (req, res) => {
   const c = store.getContent();
@@ -185,7 +215,7 @@ app.post('/admin/service/:id', requireAuth, upload.array('images', 12), (req, re
   (req.files || []).forEach(file => kept.push({ src: relUpload(file), alt: f.jp || f.en }));
   it.images = kept;
   store.saveContent(c);
-  res.redirect('/admin?ok=1');
+  res.redirect('/admin/services?ok=saved');
 });
 app.post('/admin/service/:id/delete', requireAuth, (req, res) => {
   const c = store.getContent();
@@ -193,7 +223,7 @@ app.post('/admin/service/:id/delete', requireAuth, (req, res) => {
   if (gone) (gone.images || []).forEach(im => removeUpload(im.src));
   c.services = c.services.filter(s => s.id !== req.params.id);
   store.saveContent(c);
-  res.redirect('/admin?ok=1');
+  res.redirect('/admin/services?ok=deleted');
 });
 
 // ---- Works ----
@@ -220,7 +250,7 @@ app.post('/admin/work', requireAuth, upload.single('image'), (req, res) => {
   const it = { id: store.nextId('w', c.works), ...f, order: parseInt(req.body.order, 10) || store.nextOrder(c.works) };
   it.image = req.file ? relUpload(req.file) : '';
   c.works.push(it); store.saveContent(c);
-  res.redirect('/admin?ok=1');
+  res.redirect('/admin/works?ok=saved');
 });
 app.post('/admin/work/:id', requireAuth, upload.single('image'), (req, res) => {
   const c = store.getContent();
@@ -235,7 +265,7 @@ app.post('/admin/work/:id', requireAuth, upload.single('image'), (req, res) => {
   { const o = parseInt(req.body.order, 10); if (!isNaN(o)) it.order = o; }
   if (req.file) { removeUpload(it.image); it.image = relUpload(req.file); }
   store.saveContent(c);
-  res.redirect('/admin?ok=1');
+  res.redirect('/admin/works?ok=saved');
 });
 app.post('/admin/work/:id/delete', requireAuth, (req, res) => {
   const c = store.getContent();
@@ -243,7 +273,7 @@ app.post('/admin/work/:id/delete', requireAuth, (req, res) => {
   if (gone) removeUpload(gone.image);
   c.works = c.works.filter(w => w.id !== req.params.id);
   store.saveContent(c);
-  res.redirect('/admin?ok=1');
+  res.redirect('/admin/works?ok=deleted');
 });
 
 // ---- News ----
@@ -268,7 +298,7 @@ app.post('/admin/news', requireAuth, (req, res) => {
   const c = store.getContent();
   c.news.push({ id: store.nextId('n', c.news), ...f });
   store.saveContent(c);
-  res.redirect('/admin?ok=1');
+  res.redirect('/admin/news?ok=saved');
 });
 app.post('/admin/news/:id', requireAuth, (req, res) => {
   const c = store.getContent();
@@ -280,24 +310,29 @@ app.post('/admin/news/:id', requireAuth, (req, res) => {
   }
   Object.assign(it, f);
   store.saveContent(c);
-  res.redirect('/admin?ok=1');
+  res.redirect('/admin/news?ok=saved');
 });
 app.post('/admin/news/:id/delete', requireAuth, (req, res) => {
   const c = store.getContent();
   c.news = c.news.filter(n => n.id !== req.params.id);
   store.saveContent(c);
-  res.redirect('/admin?ok=1');
+  res.redirect('/admin/news?ok=deleted');
 });
 
 // ---- Inquiries (admin inbox) ----
-app.get('/admin/inquiries', requireAuth, (req, res) => res.type('html').send(views.inquiriesList(store.getInquiries())));
+app.get('/admin/inquiries', requireAuth, (req, res) => {
+  const list = store.getInquiries();
+  const html = views.inquiriesList(list, flashOf(req));
+  store.markInquiriesRead();
+  res.type('html').send(html);
+});
 app.post('/admin/inquiries/:id/delete', requireAuth, (req, res) => {
   store.deleteInquiry(req.params.id);
-  res.redirect('/admin/inquiries');
+  res.redirect('/admin/inquiries?ok=deleted');
 });
 
 // ---- Settings (contact) ----
-app.get('/admin/settings', requireAuth, (req, res) => res.type('html').send(views.settingsForm(store.getContent().settings)));
+app.get('/admin/settings', requireAuth, (req, res) => res.type('html').send(views.settingsForm(store.getContent().settings, '', flashOf(req))));
 app.post('/admin/settings', requireAuth, (req, res) => {
   const email = (req.body.contactEmail || '').trim();
   const phone = (req.body.contactPhone || '').trim();
@@ -310,11 +345,11 @@ app.post('/admin/settings', requireAuth, (req, res) => {
   const c = store.getContent();
   c.settings = { ...c.settings, contactEmail: email, contactPhone: phone };
   store.saveContent(c);
-  res.redirect('/admin?ok=1');
+  res.redirect('/admin/settings?ok=saved');
 });
 
 // ---- Recruit ----
-app.get('/admin/recruit', requireAuth, (req, res) => res.type('html').send(views.recruitForm(store.getContent().recruit, store.SCENES)));
+app.get('/admin/recruit', requireAuth, (req, res) => res.type('html').send(views.recruitForm(store.getContent().recruit, store.SCENES, flashOf(req))));
 app.post('/admin/recruit', requireAuth, upload.single('headImg'), (req, res) => {
   const c = store.getContent();
   const r = c.recruit || {};
@@ -325,7 +360,7 @@ app.post('/admin/recruit', requireAuth, upload.single('headImg'), (req, res) => 
   r.bodyHtml = (req.body.bodyHtml || '').trim();
   if (req.file) { removeUpload(r.headImg); r.headImg = relUpload(req.file); }
   c.recruit = r; store.saveContent(c);
-  res.redirect('/admin?ok=1');
+  res.redirect('/admin/recruit?ok=saved');
 });
 
 app.use((err, req, res, next) => {

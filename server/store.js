@@ -102,11 +102,20 @@ function getInquiries() {
 }
 function addInquiry(q) {
   const list = getInquiries();
-  list.unshift(q);
+  list.unshift({ ...q, read: false });
   writeJson(INQUIRIES_FILE, list.slice(0, 500));   // cap: keep newest 500
 }
 function deleteInquiry(id) {
   writeJson(INQUIRIES_FILE, getInquiries().filter(x => x.id !== id));
+}
+function unreadInquiries() {
+  return getInquiries().filter(q => !q.read).length;
+}
+function markInquiriesRead() {
+  const list = getInquiries();
+  if (!list.some(q => !q.read)) return;
+  list.forEach(q => { q.read = true; });
+  writeJson(INQUIRIES_FILE, list);
 }
 
 // Seed news (the three items the mockup shipped with) — used by migrate-news.js
@@ -120,5 +129,5 @@ module.exports = {
   SCENES, DATA_DIR, SEED_NEWS,
   getContent, saveContent, nextId, nextOrder,
   setPassword, verifyPassword, hasPassword, ensurePasswordFromEnv,
-  getInquiries, addInquiry, deleteInquiry,
+  getInquiries, addInquiry, deleteInquiry, unreadInquiries, markInquiriesRead,
 };
