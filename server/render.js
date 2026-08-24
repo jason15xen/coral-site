@@ -94,7 +94,7 @@ function bodyToHtml(body) {
   return body.split(/\n\s*\n/).filter(Boolean).map(p => `<p>${escBr(p.trim())}</p>`).join('\n');
 }
 function newsItem(n) {
-  return `<a href="#news-${esc(n.id)}" class="news__item" data-page="newsdetail" data-news="${esc(n.id)}"><span class="news__date">${esc(fmtDate(n.date))}</span><span class="news__ttl">${esc(n.title)}</span></a>`;
+  return `<a href="#news-${esc(n.id)}" class="news__item" data-modal="modal-news" data-news="${esc(n.id)}"><span class="news__date">${esc(fmtDate(n.date))}</span><span class="news__ttl">${esc(n.title)}</span></a>`;
 }
 function newsItemsHtml(list) {
   return list.length ? '\n      ' + list.map(newsItem).join('\n      ') + '\n      ' : '\n      <p class="muted-note">お知らせはまだありません。</p>\n      ';
@@ -118,26 +118,12 @@ function newsPageHtml(list) {
   </section>`;
 }
 function newsDetailHtml(list) {
-  const arts = list.map(n => `
+  return list.map(n => `
     <article data-news-id="${esc(n.id)}" hidden>
       <p class="news__date">${esc(fmtDate(n.date))}</p>
       <h2 class="news-detail__ttl">${esc(n.title)}</h2>
       <div class="news-detail__body">${bodyToHtml(n.body)}</div>
     </article>`).join('');
-  return `
-  <section class="page-head">
-    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="News">
-    <div class="page-head__mask"></div>
-    <div class="page-head__txt">
-      <p class="eyebrow" style="color:var(--sand)">News</p>
-      <h1 class="page-head__ttl">お知らせ</h1>
-    </div>
-  </section>
-  <section class="sec">
-    <div class="msg rv">${arts}
-      <p style="margin-top:44px;display:flex;gap:28px;flex-wrap:wrap"><a href="#newslist" class="more" data-page="newslist">← お知らせ一覧</a><a href="#top" class="more" data-page="top">← Back to top</a></p>
-    </div>
-  </section>`;
 }
 
 // Recruit page (its own in-page "page", styled like the Company page-head).
@@ -164,7 +150,7 @@ function recruitPageHtml(r) {
 
 // Contact button: opens the on-site inquiry form page.
 function contactBtnHtml(settings) {
-  return `<a href="#contactform" class="contact__btn" data-page="contactform">お問い合わせ</a>`;
+  return `<a href="#inquiry" class="contact__btn" data-modal="modal-contact">お問い合わせ</a>`;
 }
 
 // The inquiry form page (in-page "page" like Company/Recruit). Submissions POST
@@ -182,35 +168,23 @@ function contactFormPageHtml(settings) {
     alt = `<p class="cform__alt">お急ぎの場合はこちらへ：${parts.join(' ／ ')}</p>`;
   }
   return `
-  <section class="page-head">
-    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="お問い合わせ">
-    <div class="page-head__mask"></div>
-    <div class="page-head__txt">
-      <p class="eyebrow" style="color:var(--sand)">Contact</p>
-      <h1 class="page-head__ttl">お問い合わせ</h1>
-      <p class="page-head__en">Get in touch</p>
-      <p class="page-head__jp">運営・清掃のご相談、採用のご応募など、お気軽にどうぞ。</p>
-    </div>
-  </section>
-  <section class="sec">
-    <div class="msg rv">
-      <form class="cform" id="cform" method="post" action="/api/inquiry">
-        <label for="cf-name">お名前 <span aria-hidden="true">*</span></label>
-        <input id="cf-name" name="name" required maxlength="100" autocomplete="name">
-        <label for="cf-email">メールアドレス <span aria-hidden="true">*</span></label>
-        <input id="cf-email" type="email" name="email" required maxlength="200" autocomplete="email">
-        <label for="cf-phone">電話番号（任意）</label>
-        <input id="cf-phone" name="phone" maxlength="40" autocomplete="tel">
-        <label for="cf-msg">お問い合わせ内容 <span aria-hidden="true">*</span></label>
-        <textarea id="cf-msg" name="message" required maxlength="4000"></textarea>
-        <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button type="submit">送信する</button>
-        <p class="cform__msg" id="cformMsg" aria-live="polite"></p>
-      </form>
-      ${alt}
-      <p style="margin-top:36px"><a href="#top" class="more" data-page="top">← Back to top</a></p>
-    </div>
-  </section>
+    <p class="eyebrow" style="color:var(--sand)">Contact</p>
+    <h2 class="modal__ttl">お問い合わせ</h2>
+    <p class="modal__lead">運営・清掃のご相談、採用のご応募など、お気軽にどうぞ。</p>
+    <form class="cform" id="cform" method="post" action="/api/inquiry">
+      <label for="cf-name">お名前 <span aria-hidden="true">*</span></label>
+      <input id="cf-name" name="name" required maxlength="100" autocomplete="name">
+      <label for="cf-email">メールアドレス <span aria-hidden="true">*</span></label>
+      <input id="cf-email" type="email" name="email" required maxlength="200" autocomplete="email">
+      <label for="cf-phone">電話番号（任意）</label>
+      <input id="cf-phone" name="phone" maxlength="40" autocomplete="tel">
+      <label for="cf-msg">お問い合わせ内容 <span aria-hidden="true">*</span></label>
+      <textarea id="cf-msg" name="message" required maxlength="4000"></textarea>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit">送信する</button>
+      <p class="cform__msg" id="cformMsg" aria-live="polite"></p>
+    </form>
+    ${alt}
   <script>
   (function(){var f=document.getElementById('cform');if(!f)return;
   if(location.protocol==='file:'){var b0=f.querySelector('button'),m0=document.getElementById('cformMsg');b0.disabled=true;m0.textContent='※プレビュー表示のため送信できません。公開サイト上でご利用ください。';return;}

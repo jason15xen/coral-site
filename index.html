@@ -224,6 +224,19 @@ body.nav-open{overflow:hidden}
 .cform .cform__msg{margin-top:20px;font-size:14px}
 .cform .hp{position:absolute;left:-9999px;height:1px;width:1px;overflow:hidden}
 .cform__alt{margin-top:30px;font-size:14px}
+.modal{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal[hidden]{display:none}
+.modal__bg{position:absolute;inset:0;background:rgba(7,22,29,.62);backdrop-filter:blur(3px);animation:mfade .3s ease}
+.modal__panel{position:relative;background:var(--paper);color:var(--ink);width:min(760px,100%);max-height:min(88vh,920px);overflow:auto;padding:clamp(32px,5vw,60px);box-shadow:0 30px 80px rgba(0,0,0,.35);animation:mrise .45s cubic-bezier(.16,1,.3,1)}
+.modal__close{position:absolute;top:12px;right:14px;width:40px;height:40px;border:0;background:none;color:var(--ink);font-size:28px;line-height:1;cursor:pointer;opacity:.6;transition:opacity .3s}
+.modal__close:hover{opacity:1}
+.modal__ttl{font-family:var(--serif);font-size:clamp(22px,2.6vw,30px);letter-spacing:.1em;margin:6px 0 10px}
+.modal__lead{font-size:14px;margin:0 0 6px}
+.modal .cform{max-width:none}
+.modal .cform button{margin-top:26px}
+body.modal-open{overflow:hidden}
+@keyframes mfade{from{opacity:0}to{opacity:1}}
+@keyframes mrise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 
 .ft{background:var(--ink);color:rgba(250,249,246,.8);padding:clamp(52px,8vw,84px) var(--gut) 34px}
 .ft__top{padding-bottom:36px;border-bottom:1px solid rgba(250,249,246,.14)}
@@ -553,57 +566,56 @@ body.nav-open{overflow:hidden}
     <h2 class="sec__title"><em>Service</em>宿にまつわる仕事を、ひととおり。</h2>
   </div>
   <div class="svc rv"><!--CMS:SERVICES-->
-    <div class="svc__row">
-      <p class="svc__en">Housekeeping</p>
-      <div>
-        <h3 class="svc__jp">客室清掃・ハウスキーピング受託</h3>
-        <p class="svc__desc">ホテル・コンドミニアム・貸別荘の客室清掃を受託。繁忙期の人員確保、清掃品質のチェック体制、リネンの手配までを一括で担います。</p>
+      <div class="svc__row">
+        <p class="svc__en">Housekeeping</p>
+        <div>
+          <h3 class="svc__jp">客室清掃・ハウスキーピング受託</h3>
+          <p class="svc__desc">ホテル・コンドミニアム・貸別荘の客室清掃を受託。繁忙期の人員確保、清掃品質のチェック体制、リネンの手配までを一括で担います。</p>
+        </div>
+        <div class="ph svc__thumb">
+          <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-room"/></svg>
+          <img class="shot on" src="assets/img/service-housekeeping.jpg" alt="客室清掃・ハウスキーピング">
+        </div>
       </div>
-      <div class="ph svc__thumb">
-        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-room"/></svg>
-        <img class="shot on" src="assets/img/service-housekeeping.jpg" alt="客室清掃・ハウスキーピング">
-        
+      <div class="svc__row">
+        <p class="svc__en">Operation</p>
+        <div>
+          <h3 class="svc__jp">宿泊施設の運営受託</h3>
+          <p class="svc__desc">フロント業務、予約・OTA運用、料金設定、日々の収支管理まで。オーナー様に代わって、宿を一棟まるごと運営します。</p>
+        </div>
+        <div class="ph svc__thumb">
+          <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
+          <img class="shot on" src="assets/img/service-operation.jpg" alt="宿泊施設の運営受託">
+        </div>
       </div>
-    </div>
-    <div class="svc__row">
-      <p class="svc__en">Operation</p>
-      <div>
-        <h3 class="svc__jp">宿泊施設の運営受託</h3>
-        <p class="svc__desc">フロント業務、予約・OTA運用、料金設定、日々の収支管理まで。オーナー様に代わって、宿を一棟まるごと運営します。</p>
-      </div>
-      <div class="ph svc__thumb">
-        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
-        <img class="shot on" src="assets/img/service-operation.jpg" alt="宿泊施設の運営受託">
-        
-      </div>
-    </div>
-    <div class="svc__row">
-      <p class="svc__en">Development</p>
-      <div>
-        <h3 class="svc__jp">不動産開発</h3>
-        <p class="svc__desc">土地の個性を読み解くところから、宿泊施設の企画・設計・開業までを一貫して手がけます。地形や岩をそのまま活かした、その場所にしか建たない宿をつくります。</p>
-      </div>
-      <div class="ph svc__thumb slide">
-        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
-        <img class="slide__img on" src="assets/img/development-01.jpg" alt="開発計画 外観">
+      <div class="svc__row">
+        <p class="svc__en">Development</p>
+        <div>
+          <h3 class="svc__jp">不動産開発</h3>
+          <p class="svc__desc">土地の個性を読み解くところから、宿泊施設の企画・設計・開業までを一貫して手がけます。地形や岩をそのまま活かした、その場所にしか建たない宿をつくります。</p>
+        </div>
+        <div class="ph svc__thumb slide">
+          <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
+          <img class="slide__img on" src="assets/img/development-01.jpg" alt="開発計画 外観">
         <img class="slide__img" src="assets/img/development-02.jpg" alt="開発計画 ラウンジ">
         <img class="slide__img" src="assets/img/development-03.jpg" alt="開発計画 バスルーム">
         <span class="slide__dots"></span>
         <span class="cap">開発計画イメージ</span>
+        </div>
       </div>
-    </div>
-    <div class="svc__row">
-      <p class="svc__en">Coral Regeneration</p>
-      <div>
-        <h3 class="svc__jp">珊瑚再生事業（沖縄海底美術館）</h3>
-        <p class="svc__desc">サンゴの苗を育て、海底に移植し、その生育を見守る取り組みです。作品としての構造物とサンゴが一体になった「沖縄海底美術館」を、地域の海とともに育てています。</p>
-      </div>
-      <div class="ph svc__thumb">
-        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-coral"/></svg>
-        <img class="shot on" src="assets/img/coral-museum.jpg" alt="沖縄海底美術館とサンゴ移植">
+      <div class="svc__row">
+        <p class="svc__en">Coral Regeneration</p>
+        <div>
+          <h3 class="svc__jp">珊瑚再生事業（沖縄海底美術館）</h3>
+          <p class="svc__desc">サンゴの苗を育て、海底に移植し、その生育を見守る取り組みです。作品としての構造物とサンゴが一体になった「沖縄海底美術館」を、地域の海とともに育てています。</p>
+        </div>
+        <div class="ph svc__thumb">
+          <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-coral"/></svg>
+          <img class="shot on" src="assets/img/coral-museum.jpg" alt="沖縄海底美術館とサンゴ移植">
         <span class="cap">沖縄海底美術館</span>
+        </div>
       </div>
-    </div><!--/CMS:SERVICES-->
+    <!--/CMS:SERVICES-->
   </div>
 </section>
 
@@ -614,33 +626,31 @@ body.nav-open{overflow:hidden}
     <h2 class="sec__title sec__title--en">Works</h2>
   </div>
   <div class="works rv"><!--CMS:WORKS-->
-    <a href="#" class="work">
-      <div class="ph work__img">
-        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
-        <img class="shot on" src="assets/img/works-yawnyard-kouri.jpg" alt="ヨーンヤード古宇利島">
-        
-      </div>
-      <p class="work__meta"><span>Kouri Island</span><span>今帰仁村</span></p>
-      <p class="work__name">ヨーンヤード古宇利島</p>
-    </a>
-    <a href="#" class="work">
-      <div class="ph work__img">
-        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-pool"/></svg>
-        <img class="shot on" src="assets/img/works-poolvilla-amaha.jpg" alt="プールヴィラ天羽">
-        
-      </div>
-      <p class="work__meta"><span>Unten</span><span>今帰仁村</span></p>
-      <p class="work__name">プールヴィラ天羽</p>
-    </a>
-    <a href="#" class="work">
-      <div class="ph work__img">
-        <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-building"/></svg>
-        <img class="shot on" src="assets/img/works-lieta-nakayama.jpg" alt="リエッタ中山">
-        
-      </div>
-      <p class="work__meta"><span>Nago</span><span>名護市</span></p>
-      <p class="work__name">リエッタ中山</p>
-    </a><!--/CMS:WORKS-->
+      <a href="#" class="work">
+        <div class="ph work__img">
+          <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
+          <img class="shot on" src="assets/img/works-yawnyard-kouri.jpg" alt="ヨーンヤード古宇利島">
+        </div>
+        <p class="work__meta"><span>Kouri Island</span><span>今帰仁村</span></p>
+        <p class="work__name">ヨーンヤード古宇利島</p>
+      </a>
+      <a href="#" class="work">
+        <div class="ph work__img">
+          <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-pool"/></svg>
+          <img class="shot on" src="assets/img/works-poolvilla-amaha.jpg" alt="プールヴィラ天羽">
+        </div>
+        <p class="work__meta"><span>Unten</span><span>今帰仁村</span></p>
+        <p class="work__name">プールヴィラ天羽</p>
+      </a>
+      <a href="#" class="work">
+        <div class="ph work__img">
+          <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-building"/></svg>
+          <img class="shot on" src="assets/img/works-lieta-nakayama.jpg" alt="リエッタ中山">
+        </div>
+        <p class="work__meta"><span>Nago</span><span>名護市</span></p>
+        <p class="work__name">リエッタ中山</p>
+      </a>
+    <!--/CMS:WORKS-->
   </div>
   <p style="margin-top:44px" class="rv"><a href="#workslist" class="more" data-page="workslist">All works →</a></p>
 </section>
@@ -678,9 +688,9 @@ body.nav-open{overflow:hidden}
         <h2 class="sec__title"><em>News</em>お知らせ</h2>
       </div>
       <!--CMS:NEWS-->
-      <a href="#news-n1" class="news__item" data-page="newsdetail" data-news="n1"><span class="news__date">2026.08.01</span><span class="news__ttl">受託施設を更新いたしました</span></a>
-      <a href="#news-n2" class="news__item" data-page="newsdetail" data-news="n2"><span class="news__date">2026.07.20</span><span class="news__ttl">夏季休業のお知らせ</span></a>
-      <a href="#news-n3" class="news__item" data-page="newsdetail" data-news="n3"><span class="news__date">2026.06.11</span><span class="news__ttl">本部町の宿泊施設の運営を開始しました</span></a>
+      <a href="#news-n1" class="news__item" data-modal="modal-news" data-news="n1"><span class="news__date">2026.08.01</span><span class="news__ttl">受託施設を更新いたしました</span></a>
+      <a href="#news-n2" class="news__item" data-modal="modal-news" data-news="n2"><span class="news__date">2026.07.20</span><span class="news__ttl">夏季休業のお知らせ</span></a>
+      <a href="#news-n3" class="news__item" data-modal="modal-news" data-news="n3"><span class="news__date">2026.06.11</span><span class="news__ttl">本部町の宿泊施設の運営を開始しました</span></a>
       <!--/CMS:NEWS-->
       <p style="margin-top:34px"><a href="#newslist" class="more" data-page="newslist">All news →</a></p>
     </div>
@@ -703,7 +713,7 @@ body.nav-open{overflow:hidden}
     <p class="eyebrow" style="color:var(--sand)">Contact</p>
     <h2 class="contact__ttl">その宿の運営、<br>お預かりできるかもしれません。</h2>
     <p class="contact__txt">清掃だけ、繁忙期だけのご相談も歓迎です。</p>
-    <!--CMS:CONTACT--><a href="#contactform" class="contact__btn" data-page="contactform">お問い合わせ</a><!--/CMS:CONTACT-->
+    <!--CMS:CONTACT--><a href="#inquiry" class="contact__btn" data-modal="modal-contact">お問い合わせ</a><!--/CMS:CONTACT-->
   </div>
 </section>
 
@@ -821,24 +831,16 @@ body.nav-open{overflow:hidden}
   </section>
   <section class="sec">
     <div class="msg rv">
-      <a href="#news-n1" class="news__item" data-page="newsdetail" data-news="n1"><span class="news__date">2026.08.01</span><span class="news__ttl">受託施設を更新いたしました</span></a>
-      <a href="#news-n2" class="news__item" data-page="newsdetail" data-news="n2"><span class="news__date">2026.07.20</span><span class="news__ttl">夏季休業のお知らせ</span></a>
-      <a href="#news-n3" class="news__item" data-page="newsdetail" data-news="n3"><span class="news__date">2026.06.11</span><span class="news__ttl">本部町の宿泊施設の運営を開始しました</span></a>
+      <a href="#news-n1" class="news__item" data-modal="modal-news" data-news="n1"><span class="news__date">2026.08.01</span><span class="news__ttl">受託施設を更新いたしました</span></a>
+      <a href="#news-n2" class="news__item" data-modal="modal-news" data-news="n2"><span class="news__date">2026.07.20</span><span class="news__ttl">夏季休業のお知らせ</span></a>
+      <a href="#news-n3" class="news__item" data-modal="modal-news" data-news="n3"><span class="news__date">2026.06.11</span><span class="news__ttl">本部町の宿泊施設の運営を開始しました</span></a>
       <p style="margin-top:44px"><a href="#top" class="more" data-page="top">← Back to top</a></p>
     </div>
   </section><!--/CMS:NEWS_PAGE--></main>
 
-<main id="page-newsdetail" class="page" hidden><!--CMS:NEWS_DETAIL-->
-  <section class="page-head">
-    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="News">
-    <div class="page-head__mask"></div>
-    <div class="page-head__txt">
-      <p class="eyebrow" style="color:var(--sand)">News</p>
-      <h1 class="page-head__ttl">お知らせ</h1>
-    </div>
-  </section>
-  <section class="sec">
-    <div class="msg rv">
+<div class="modal" id="modal-news" hidden role="dialog" aria-modal="true" aria-label="お知らせ">
+  <div class="modal__bg"></div>
+  <div class="modal__panel"><button class="modal__close" type="button" aria-label="閉じる">×</button><!--CMS:NEWS_DETAIL-->
     <article data-news-id="n1" hidden>
       <p class="news__date">2026.08.01</p>
       <h2 class="news-detail__ttl">受託施設を更新いたしました</h2>
@@ -853,41 +855,28 @@ body.nav-open{overflow:hidden}
       <p class="news__date">2026.06.11</p>
       <h2 class="news-detail__ttl">本部町の宿泊施設の運営を開始しました</h2>
       <div class="news-detail__body"><p>（この記事の本文は後ほど追加します。）</p></div>
-    </article>
-      <p style="margin-top:44px;display:flex;gap:28px;flex-wrap:wrap"><a href="#newslist" class="more" data-page="newslist">← お知らせ一覧</a><a href="#top" class="more" data-page="top">← Back to top</a></p>
-    </div>
-  </section><!--/CMS:NEWS_DETAIL--></main>
-
-<main id="page-contactform" class="page" hidden><!--CMS:CONTACT_PAGE-->
-  <section class="page-head">
-    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="お問い合わせ">
-    <div class="page-head__mask"></div>
-    <div class="page-head__txt">
-      <p class="eyebrow" style="color:var(--sand)">Contact</p>
-      <h1 class="page-head__ttl">お問い合わせ</h1>
-      <p class="page-head__en">Get in touch</p>
-      <p class="page-head__jp">運営・清掃のご相談、採用のご応募など、お気軽にどうぞ。</p>
-    </div>
-  </section>
-  <section class="sec">
-    <div class="msg rv">
-      <form class="cform" id="cform" method="post" action="/api/inquiry">
-        <label for="cf-name">お名前 <span aria-hidden="true">*</span></label>
-        <input id="cf-name" name="name" required maxlength="100" autocomplete="name">
-        <label for="cf-email">メールアドレス <span aria-hidden="true">*</span></label>
-        <input id="cf-email" type="email" name="email" required maxlength="200" autocomplete="email">
-        <label for="cf-phone">電話番号（任意）</label>
-        <input id="cf-phone" name="phone" maxlength="40" autocomplete="tel">
-        <label for="cf-msg">お問い合わせ内容 <span aria-hidden="true">*</span></label>
-        <textarea id="cf-msg" name="message" required maxlength="4000"></textarea>
-        <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button type="submit">送信する</button>
-        <p class="cform__msg" id="cformMsg" aria-live="polite"></p>
-      </form>
-      
-      <p style="margin-top:36px"><a href="#top" class="more" data-page="top">← Back to top</a></p>
-    </div>
-  </section>
+    </article><!--/CMS:NEWS_DETAIL--></div>
+</div>
+<div class="modal" id="modal-contact" hidden role="dialog" aria-modal="true" aria-label="お問い合わせ">
+  <div class="modal__bg"></div>
+  <div class="modal__panel"><button class="modal__close" type="button" aria-label="閉じる">×</button><!--CMS:CONTACT_PAGE-->
+    <p class="eyebrow" style="color:var(--sand)">Contact</p>
+    <h2 class="modal__ttl">お問い合わせ</h2>
+    <p class="modal__lead">運営・清掃のご相談、採用のご応募など、お気軽にどうぞ。</p>
+    <form class="cform" id="cform" method="post" action="/api/inquiry">
+      <label for="cf-name">お名前 <span aria-hidden="true">*</span></label>
+      <input id="cf-name" name="name" required maxlength="100" autocomplete="name">
+      <label for="cf-email">メールアドレス <span aria-hidden="true">*</span></label>
+      <input id="cf-email" type="email" name="email" required maxlength="200" autocomplete="email">
+      <label for="cf-phone">電話番号（任意）</label>
+      <input id="cf-phone" name="phone" maxlength="40" autocomplete="tel">
+      <label for="cf-msg">お問い合わせ内容 <span aria-hidden="true">*</span></label>
+      <textarea id="cf-msg" name="message" required maxlength="4000"></textarea>
+      <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button type="submit">送信する</button>
+      <p class="cform__msg" id="cformMsg" aria-live="polite"></p>
+    </form>
+    
   <script>
   (function(){var f=document.getElementById('cform');if(!f)return;
   if(location.protocol==='file:'){var b0=f.querySelector('button'),m0=document.getElementById('cformMsg');b0.disabled=true;m0.textContent='※プレビュー表示のため送信できません。公開サイト上でご利用ください。';return;}
@@ -901,7 +890,8 @@ body.nav-open{overflow:hidden}
       else{m.textContent=j.error||'送信に失敗しました。時間をおいてお試しください。';b.disabled=false;}})
     .catch(function(){m.textContent='サーバーに接続できませんでした。時間をおいて再度お試しください。';b.disabled=false;});
   });})();
-  </script><!--/CMS:CONTACT_PAGE--></main>
+  </script><!--/CMS:CONTACT_PAGE--></div>
+</div>
 
 <footer class="ft">
   <div class="ft__top">
@@ -936,19 +926,18 @@ document.querySelectorAll('.slide').forEach(box=>{
 });
 
 /* ページ切り替え（実制作では /company/ など別ページになります） */
-const pages={top:document.getElementById('page-top'),company:document.getElementById('page-company'),recruit:document.getElementById('page-recruit'),contactform:document.getElementById('page-contactform'),workslist:document.getElementById('page-workslist'),newslist:document.getElementById('page-newslist'),newsdetail:document.getElementById('page-newsdetail')};
-const pageFromHash=()=>location.hash.startsWith('#news-')?'newsdetail':({'#company':'company','#recruit':'recruit','#contactform':'contactform','#workslist':'workslist','#newslist':'newslist'}[location.hash]||'top');
-const newsIdFromHash=()=>location.hash.startsWith('#news-')?location.hash.slice(6):'';
-function showPage(name,anchor,newsId){
-  Object.entries(pages).forEach(([k,el])=>{el.hidden=(k!==name)});
-  if(name==='newsdetail')pages.newsdetail.querySelectorAll('article[data-news-id]').forEach(a=>{a.hidden=(a.dataset.newsId!==newsId)});
+const pages={top:document.getElementById('page-top'),company:document.getElementById('page-company'),recruit:document.getElementById('page-recruit'),workslist:document.getElementById('page-workslist'),newslist:document.getElementById('page-newslist')};
+const pageFromHash=()=>({'#company':'company','#recruit':'recruit','#workslist':'workslist','#newslist':'newslist'}[location.hash]||'top');
+function showPage(name,anchor){
+  const changed=pages[name].hidden;
+  Object.entries(pages).forEach(([k,el])=>{if(el)el.hidden=(k!==name)});
   document.body.classList.remove('nav-open');
   syncHeader();
   if(anchor){const t=document.getElementById(anchor);if(t){t.scrollIntoView();return}}
-  scrollTo(0,0);
+  if(changed)scrollTo(0,0);
 }
 document.querySelectorAll('[data-page]').forEach(el=>{
-  el.addEventListener('click',e=>{e.preventDefault();showPage(el.dataset.page,null,el.dataset.news);history.pushState(null,'',el.getAttribute('href'))});
+  el.addEventListener('click',e=>{e.preventDefault();showPage(el.dataset.page);history.pushState(null,'',el.getAttribute('href'))});
 });
 /* ヘッダーのアンカーはTOPへ戻ってから移動 */
 document.querySelectorAll('.hd__nav a[href^="#"]:not([data-page]), .drawer a[href^="#"]:not([data-page])').forEach(a=>{
@@ -958,8 +947,31 @@ document.querySelectorAll('.hd__nav a[href^="#"]:not([data-page]), .drawer a[hre
     e.preventDefault();showPage('top',id);
   });
 });
-if(pageFromHash()!=='top')showPage(pageFromHash(),null,newsIdFromHash());
-addEventListener('popstate',()=>showPage(pageFromHash(),null,newsIdFromHash()));
+/* モーダル（お知らせ詳細・お問い合わせフォーム） */
+const modalOf=h=>h.startsWith('#news-')?{id:'modal-news',news:h.slice(6)}:(h==='#inquiry'?{id:'modal-contact'}:null);
+let modalPushed=false;
+function openModal(id,newsId,push){
+  const m=document.getElementById(id);if(!m)return;
+  document.querySelectorAll('.modal').forEach(x=>{x.hidden=(x!==m)});
+  if(id==='modal-news')m.querySelectorAll('article[data-news-id]').forEach(a=>{a.hidden=(a.dataset.newsId!==newsId)});
+  m.querySelector('.modal__panel').scrollTop=0;
+  document.body.classList.add('modal-open');
+  if(push){history.pushState(null,'',id==='modal-news'?'#news-'+newsId:'#inquiry');modalPushed=true}
+  const c=m.querySelector('.modal__close');if(c)c.focus();
+}
+function hideModals(){document.querySelectorAll('.modal').forEach(x=>{x.hidden=true});document.body.classList.remove('modal-open')}
+function closeModal(){
+  if(!document.querySelector('.modal:not([hidden])'))return;
+  if(modalPushed){modalPushed=false;history.back();return}
+  hideModals();
+  if(modalOf(location.hash))history.replaceState(null,'',location.pathname+location.search);
+}
+document.querySelectorAll('[data-modal]').forEach(el=>{el.addEventListener('click',e=>{e.preventDefault();openModal(el.dataset.modal,el.dataset.news,true)})});
+document.querySelectorAll('.modal__close,.modal__bg').forEach(el=>el.addEventListener('click',closeModal));
+addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+{const mh=modalOf(location.hash);if(mh)openModal(mh.id,mh.news,false);else if(pageFromHash()!=='top')showPage(pageFromHash());}
+addEventListener('popstate',()=>{const mh=modalOf(location.hash);if(mh){openModal(mh.id,mh.news,false)}else{hideModals();modalPushed=false;showPage(pageFromHash())}});
 
 /* モバイルメニュー */
 const btn=document.getElementById('menuBtn'),drawer=document.getElementById('drawer');
