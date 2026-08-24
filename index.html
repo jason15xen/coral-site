@@ -27,7 +27,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-section[id]{scroll-margin-top:88px}
+section[id],#recruit{scroll-margin-top:88px}
 a,button{-webkit-tap-highlight-color:transparent}
 body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:300;line-height:2;letter-spacing:.04em;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img{max-width:100%;display:block}
@@ -528,8 +528,8 @@ body.modal-open .totop,body.nav-open .totop{opacity:0;visibility:hidden}
 <header class="hd" id="hd">
   <a href="#top" class="hd__logo" data-page="top"><span>Coral</span><span>Resort</span><span>Management</span></a>
   <nav class="hd__nav">
-    <a href="#about">About</a><a href="#company" data-page="company">Company</a><a href="#service">Service</a><a href="#works">Works</a>
-    <a href="#news">News</a><a href="#recruit" data-page="recruit">Recruit</a>
+    <a href="#about">About</a><a href="#service">Service</a><a href="#works">Works</a>
+    <a href="#news">News</a><a href="#recruit">Recruit</a>
     <a href="#contact" class="hd__cta">Contact</a>
   </nav>
   <button class="hd__menu" id="menuBtn" aria-label="メニュー" aria-expanded="false"><i></i>MENU</button>
@@ -537,11 +537,10 @@ body.modal-open .totop,body.nav-open .totop{opacity:0;visibility:hidden}
 
 <nav class="drawer" id="drawer" aria-hidden="true">
   <a href="#about">About us</a>
-  <a href="#company" data-page="company">Message / Company info</a>
   <a href="#service">Service</a>
   <a href="#works">Works</a>
   <a href="#news">News</a>
-  <a href="#recruit" data-page="recruit">Recruit</a>
+  <a href="#recruit">Recruit</a>
   <a href="#contact" class="drawer__cta">Contact</a>
 </nav>
 
@@ -726,7 +725,7 @@ body.modal-open .totop,body.nav-open .totop{opacity:0;visibility:hidden}
       <p class="eyebrow" style="color:var(--sand)">Recruit</p>
       <h2 class="rec__ttl">海のそばで、<br>働きませんか。</h2>
       <p class="rec__txt">未経験から始めたスタッフがほとんどです。清掃スタッフ、フロント、マネージャー候補を募集しています。</p>
-      <p><a href="#recruit" class="more" data-page="recruit" style="color:#fff">Recruit →</a></p>
+      <p><a href="#page-recruit" class="more" data-page="recruit" style="color:#fff">Recruit →</a></p>
     </div>
   </div>
 </section>
@@ -936,8 +935,12 @@ const hd=document.getElementById('hd'),toTop=document.getElementById('toTop');
 toTop.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
 /* 現在地インジケーター（TOPページのセクション） */
 const navLinks=[...document.querySelectorAll('.hd__nav a[href^="#"]:not([data-page]):not(.hd__cta)')];
-const secIO=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle('is-active',a.getAttribute('href')==='#'+e.target.id))}})},{rootMargin:'-40% 0px -55% 0px'});
-['about','service','works','news'].forEach(id=>{const el=document.getElementById(id);if(el)secIO.observe(el)});
+let navLock=0;
+const secActive=new Set(),secOrder=['about','service','works','news','recruit'],secOf=new Map();
+let navTimer=0;
+const applyActive=()=>{const cur=secOrder.find(id=>secActive.has(id));navLinks.forEach(a=>a.classList.toggle('is-active',!!cur&&a.getAttribute('href')==='#'+cur))};
+const secIO=new IntersectionObserver(es=>{es.forEach(e=>{const id=secOf.get(e.target);e.isIntersecting?secActive.add(id):secActive.delete(id)});if(Date.now()<navLock){clearTimeout(navTimer);navTimer=setTimeout(applyActive,navLock-Date.now()+60);return}applyActive()},{rootMargin:'-40% 0px -55% 0px'});
+[['about','#about'],['service','#service'],['works','#works'],['news','#news .band > .rv'],['recruit','#recruit']].forEach(([id,sel])=>{const el=document.querySelector(sel);if(el){secOf.set(el,id);secIO.observe(el)}});
 function syncHeader(){hd.classList.toggle('solid',pages.top.hidden||scrollY>innerHeight*0.82);toTop.classList.toggle('on',scrollY>innerHeight*0.8)}
 addEventListener('scroll',syncHeader,{passive:true});
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
@@ -962,7 +965,7 @@ document.querySelectorAll('.slide').forEach(box=>{
 
 /* ページ切り替え（実制作では /company/ など別ページになります） */
 const pages={top:document.getElementById('page-top'),company:document.getElementById('page-company'),recruit:document.getElementById('page-recruit'),workslist:document.getElementById('page-workslist'),newslist:document.getElementById('page-newslist')};
-const pageFromHash=()=>({'#company':'company','#recruit':'recruit','#workslist':'workslist','#newslist':'newslist'}[location.hash]||'top');
+const pageFromHash=()=>({'#company':'company','#page-recruit':'recruit','#workslist':'workslist','#newslist':'newslist'}[location.hash]||'top');
 function showPage(name,anchor){
   const changed=pages[name].hidden;
   Object.entries(pages).forEach(([k,el])=>{if(el)el.hidden=(k!==name)});
@@ -979,8 +982,9 @@ document.querySelectorAll('[data-page]').forEach(el=>{
 document.querySelectorAll('.hd__nav a[href^="#"]:not([data-page]), .drawer a[href^="#"]:not([data-page])').forEach(a=>{
   a.addEventListener('click',e=>{
     const id=a.getAttribute('href').slice(1);
+    navLock=Date.now()+1000;navLinks.forEach(x=>x.classList.toggle('is-active',x.getAttribute('href')==='#'+id));
     if(!pages.top.hidden) return;
-    e.preventDefault();showPage('top',id);
+    e.preventDefault();showPage('top',id);history.pushState(null,'','#'+id);
   });
 });
 /* モーダル（お知らせ詳細・お問い合わせフォーム） */
@@ -1009,7 +1013,8 @@ addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 /* モーダル内でフォーカスを循環させる */
 addEventListener('keydown',e=>{if(e.key!=='Tab')return;const m=document.querySelector('.modal:not([hidden])');if(!m)return;const f=[...m.querySelectorAll('a[href],button:not([disabled]),input:not([type=hidden]):not([tabindex="-1"]),textarea,select')].filter(x=>x.offsetParent!==null);if(!f.length)return;const first=f[0],last=f[f.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}});
 
-{const mh=modalOf(location.hash);if(mh)openModal(mh.id,mh.news,false);else if(pageFromHash()!=='top'){showPage(pageFromHash());addEventListener('load',()=>scrollTo({top:0,behavior:'instant'}),{once:true})}}
+{const mh=modalOf(location.hash);if(mh)openModal(mh.id,mh.news,false);else if(pageFromHash()!=='top'){showPage(pageFromHash());addEventListener('load',()=>scrollTo({top:0,behavior:'instant'}),{once:true})}
+  else if(location.hash.length>1){const t=document.getElementById(location.hash.slice(1));if(t&&pages.top.contains(t))Promise.all([new Promise(r=>addEventListener('load',r,{once:true})),document.fonts.ready]).then(()=>t.scrollIntoView({behavior:'instant'}))}}
 addEventListener('popstate',()=>{const mh=modalOf(location.hash);if(mh){openModal(mh.id,mh.news,false)}else{hideModals();modalPushed=false;showPage(pageFromHash())}});
 
 /* モバイルメニュー */
