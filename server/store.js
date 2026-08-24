@@ -38,6 +38,7 @@ function getContent() {
   c.works = (c.works || []).sort((a, b) => (a.order || 0) - (b.order || 0));
   c.recruit = c.recruit || {};
   c.settings = c.settings || {};
+  c.news = (Array.isArray(c.news) ? c.news : []).sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));  // newest first
   return c;
 }
 
@@ -108,8 +109,15 @@ function deleteInquiry(id) {
   writeJson(INQUIRIES_FILE, getInquiries().filter(x => x.id !== id));
 }
 
+// Seed news (the three items the mockup shipped with) — used by migrate-news.js
+const SEED_NEWS = [
+  { id: 'n1', date: '2026-08-01', title: '受託施設を更新いたしました', body: '（この記事の本文は後ほど追加します。）' },
+  { id: 'n2', date: '2026-07-20', title: '夏季休業のお知らせ', body: '（この記事の本文は後ほど追加します。）' },
+  { id: 'n3', date: '2026-06-11', title: '本部町の宿泊施設の運営を開始しました', body: '（この記事の本文は後ほど追加します。）' },
+];
+
 module.exports = {
-  SCENES, DATA_DIR,
+  SCENES, DATA_DIR, SEED_NEWS,
   getContent, saveContent, nextId, nextOrder,
   setPassword, verifyPassword, hasPassword, ensurePasswordFromEnv,
   getInquiries, addInquiry, deleteInquiry,

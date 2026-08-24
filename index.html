@@ -191,6 +191,9 @@ body.nav-open{overflow:hidden}
 @media(hover:hover){.news__item:hover{opacity:.6}}
 .news__date{font-family:var(--util);font-size:11.5px;letter-spacing:.14em;color:var(--sea);white-space:nowrap}
 .news__ttl{font-size:13.5px;letter-spacing:.06em}
+.news-detail__ttl{font-family:var(--serif);font-size:clamp(20px,2.4vw,28px);letter-spacing:.08em;line-height:1.6;margin:10px 0 28px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.news-detail__body p{margin:0 0 1.4em}
+.muted-note{font-size:13.5px;color:#888}
 .rec{position:relative;color:#fff;padding:clamp(34px,5vw,54px);display:flex;flex-direction:column;justify-content:flex-end;min-height:340px;overflow:hidden;background:var(--deep)}
 .rec .scene,.rec .shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .rec .shot{opacity:0;transition:opacity 1.2s}
@@ -674,10 +677,12 @@ body.nav-open{overflow:hidden}
         <span class="sec__index">05 ／ News</span>
         <h2 class="sec__title"><em>News</em>お知らせ</h2>
       </div>
-      <a href="#" class="news__item"><span class="news__date">2026.08.01</span><span class="news__ttl">受託施設を更新いたしました</span></a>
-      <a href="#" class="news__item"><span class="news__date">2026.07.20</span><span class="news__ttl">夏季休業のお知らせ</span></a>
-      <a href="#" class="news__item"><span class="news__date">2026.06.11</span><span class="news__ttl">本部町の宿泊施設の運営を開始しました</span></a>
-      <p style="margin-top:34px"><a href="#" class="more">All news →</a></p>
+      <!--CMS:NEWS-->
+      <a href="#news-n1" class="news__item" data-page="newsdetail" data-news="n1"><span class="news__date">2026.08.01</span><span class="news__ttl">受託施設を更新いたしました</span></a>
+      <a href="#news-n2" class="news__item" data-page="newsdetail" data-news="n2"><span class="news__date">2026.07.20</span><span class="news__ttl">夏季休業のお知らせ</span></a>
+      <a href="#news-n3" class="news__item" data-page="newsdetail" data-news="n3"><span class="news__date">2026.06.11</span><span class="news__ttl">本部町の宿泊施設の運営を開始しました</span></a>
+      <!--/CMS:NEWS-->
+      <p style="margin-top:34px"><a href="#newslist" class="more" data-page="newslist">All news →</a></p>
     </div>
     <div class="rec rv" id="recruit">
       <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-staff"/></svg>
@@ -804,6 +809,55 @@ body.nav-open{overflow:hidden}
     <p style="margin-top:44px"><a href="#top" class="more" data-page="top">← Back to top</a></p>
   </section><!--/CMS:WORKS_PAGE--></main>
 
+<main id="page-newslist" class="page" hidden><!--CMS:NEWS_PAGE-->
+  <section class="page-head">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="News">
+    <div class="page-head__mask"></div>
+    <div class="page-head__txt">
+      <p class="eyebrow" style="color:var(--sand)">News</p>
+      <h1 class="page-head__ttl">お知らせ一覧</h1>
+      <p class="page-head__en">All news</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="msg rv">
+      <a href="#news-n1" class="news__item" data-page="newsdetail" data-news="n1"><span class="news__date">2026.08.01</span><span class="news__ttl">受託施設を更新いたしました</span></a>
+      <a href="#news-n2" class="news__item" data-page="newsdetail" data-news="n2"><span class="news__date">2026.07.20</span><span class="news__ttl">夏季休業のお知らせ</span></a>
+      <a href="#news-n3" class="news__item" data-page="newsdetail" data-news="n3"><span class="news__date">2026.06.11</span><span class="news__ttl">本部町の宿泊施設の運営を開始しました</span></a>
+      <p style="margin-top:44px"><a href="#top" class="more" data-page="top">← Back to top</a></p>
+    </div>
+  </section><!--/CMS:NEWS_PAGE--></main>
+
+<main id="page-newsdetail" class="page" hidden><!--CMS:NEWS_DETAIL-->
+  <section class="page-head">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="News">
+    <div class="page-head__mask"></div>
+    <div class="page-head__txt">
+      <p class="eyebrow" style="color:var(--sand)">News</p>
+      <h1 class="page-head__ttl">お知らせ</h1>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="msg rv">
+    <article data-news-id="n1" hidden>
+      <p class="news__date">2026.08.01</p>
+      <h2 class="news-detail__ttl">受託施設を更新いたしました</h2>
+      <div class="news-detail__body"><p>（この記事の本文は後ほど追加します。）</p></div>
+    </article>
+    <article data-news-id="n2" hidden>
+      <p class="news__date">2026.07.20</p>
+      <h2 class="news-detail__ttl">夏季休業のお知らせ</h2>
+      <div class="news-detail__body"><p>（この記事の本文は後ほど追加します。）</p></div>
+    </article>
+    <article data-news-id="n3" hidden>
+      <p class="news__date">2026.06.11</p>
+      <h2 class="news-detail__ttl">本部町の宿泊施設の運営を開始しました</h2>
+      <div class="news-detail__body"><p>（この記事の本文は後ほど追加します。）</p></div>
+    </article>
+      <p style="margin-top:44px;display:flex;gap:28px;flex-wrap:wrap"><a href="#newslist" class="more" data-page="newslist">← お知らせ一覧</a><a href="#top" class="more" data-page="top">← Back to top</a></p>
+    </div>
+  </section><!--/CMS:NEWS_DETAIL--></main>
+
 <main id="page-contactform" class="page" hidden><!--CMS:CONTACT_PAGE-->
   <section class="page-head">
     <img class="page-head__img" src="assets/img/message-hero.jpg" alt="お問い合わせ">
@@ -882,17 +936,19 @@ document.querySelectorAll('.slide').forEach(box=>{
 });
 
 /* ページ切り替え（実制作では /company/ など別ページになります） */
-const pages={top:document.getElementById('page-top'),company:document.getElementById('page-company'),recruit:document.getElementById('page-recruit'),contactform:document.getElementById('page-contactform'),workslist:document.getElementById('page-workslist')};
-const pageFromHash=()=>({'#company':'company','#recruit':'recruit','#contactform':'contactform','#workslist':'workslist'}[location.hash]||'top');
-function showPage(name,anchor){
+const pages={top:document.getElementById('page-top'),company:document.getElementById('page-company'),recruit:document.getElementById('page-recruit'),contactform:document.getElementById('page-contactform'),workslist:document.getElementById('page-workslist'),newslist:document.getElementById('page-newslist'),newsdetail:document.getElementById('page-newsdetail')};
+const pageFromHash=()=>location.hash.startsWith('#news-')?'newsdetail':({'#company':'company','#recruit':'recruit','#contactform':'contactform','#workslist':'workslist','#newslist':'newslist'}[location.hash]||'top');
+const newsIdFromHash=()=>location.hash.startsWith('#news-')?location.hash.slice(6):'';
+function showPage(name,anchor,newsId){
   Object.entries(pages).forEach(([k,el])=>{el.hidden=(k!==name)});
+  if(name==='newsdetail')pages.newsdetail.querySelectorAll('article[data-news-id]').forEach(a=>{a.hidden=(a.dataset.newsId!==newsId)});
   document.body.classList.remove('nav-open');
   syncHeader();
   if(anchor){const t=document.getElementById(anchor);if(t){t.scrollIntoView();return}}
   scrollTo(0,0);
 }
 document.querySelectorAll('[data-page]').forEach(el=>{
-  el.addEventListener('click',e=>{e.preventDefault();showPage(el.dataset.page);history.pushState(null,'','#'+el.dataset.page)});
+  el.addEventListener('click',e=>{e.preventDefault();showPage(el.dataset.page,null,el.dataset.news);history.pushState(null,'',el.getAttribute('href'))});
 });
 /* ヘッダーのアンカーはTOPへ戻ってから移動 */
 document.querySelectorAll('.hd__nav a[href^="#"]:not([data-page]), .drawer a[href^="#"]:not([data-page])').forEach(a=>{
@@ -902,8 +958,8 @@ document.querySelectorAll('.hd__nav a[href^="#"]:not([data-page]), .drawer a[hre
     e.preventDefault();showPage('top',id);
   });
 });
-if(pageFromHash()!=='top')showPage(pageFromHash());
-addEventListener('popstate',()=>showPage(pageFromHash()));
+if(pageFromHash()!=='top')showPage(pageFromHash(),null,newsIdFromHash());
+addEventListener('popstate',()=>showPage(pageFromHash(),null,newsIdFromHash()));
 
 /* モバイルメニュー */
 const btn=document.getElementById('menuBtn'),drawer=document.getElementById('drawer');

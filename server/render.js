@@ -85,6 +85,61 @@ ${list.map(workCard).join('\n')}
   </section>`;
 }
 
+// ---------- News ----------
+function fmtDate(d) { return String(d || '').replace(/-/g, '.'); }
+// Admin may enter plain text (blank line = paragraph) or HTML.
+function bodyToHtml(body) {
+  body = String(body || '');
+  if (/<[a-z][\s\S]*>/i.test(body)) return body;
+  return body.split(/\n\s*\n/).filter(Boolean).map(p => `<p>${escBr(p.trim())}</p>`).join('\n');
+}
+function newsItem(n) {
+  return `<a href="#news-${esc(n.id)}" class="news__item" data-page="newsdetail" data-news="${esc(n.id)}"><span class="news__date">${esc(fmtDate(n.date))}</span><span class="news__ttl">${esc(n.title)}</span></a>`;
+}
+function newsItemsHtml(list) {
+  return list.length ? '\n      ' + list.map(newsItem).join('\n      ') + '\n      ' : '\n      <p class="muted-note">お知らせはまだありません。</p>\n      ';
+}
+function newsPageHtml(list) {
+  return `
+  <section class="page-head">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="News">
+    <div class="page-head__mask"></div>
+    <div class="page-head__txt">
+      <p class="eyebrow" style="color:var(--sand)">News</p>
+      <h1 class="page-head__ttl">お知らせ一覧</h1>
+      <p class="page-head__en">All news</p>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="msg rv">
+      ${list.length ? list.map(newsItem).join('\n      ') : '<p>お知らせはまだありません。</p>'}
+      <p style="margin-top:44px"><a href="#top" class="more" data-page="top">← Back to top</a></p>
+    </div>
+  </section>`;
+}
+function newsDetailHtml(list) {
+  const arts = list.map(n => `
+    <article data-news-id="${esc(n.id)}" hidden>
+      <p class="news__date">${esc(fmtDate(n.date))}</p>
+      <h2 class="news-detail__ttl">${esc(n.title)}</h2>
+      <div class="news-detail__body">${bodyToHtml(n.body)}</div>
+    </article>`).join('');
+  return `
+  <section class="page-head">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="News">
+    <div class="page-head__mask"></div>
+    <div class="page-head__txt">
+      <p class="eyebrow" style="color:var(--sand)">News</p>
+      <h1 class="page-head__ttl">お知らせ</h1>
+    </div>
+  </section>
+  <section class="sec">
+    <div class="msg rv">${arts}
+      <p style="margin-top:44px;display:flex;gap:28px;flex-wrap:wrap"><a href="#newslist" class="more" data-page="newslist">← お知らせ一覧</a><a href="#top" class="more" data-page="top">← Back to top</a></p>
+    </div>
+  </section>`;
+}
+
 // Recruit page (its own in-page "page", styled like the Company page-head).
 function recruitPageHtml(r) {
   r = r || {};
@@ -172,4 +227,4 @@ function contactFormPageHtml(settings) {
   </script>`;
 }
 
-module.exports = { esc, escBr, servicesHtml, worksHtml, worksPageHtml, recruitPageHtml, contactBtnHtml, contactFormPageHtml };
+module.exports = { esc, escBr, servicesHtml, worksHtml, worksPageHtml, newsItemsHtml, newsPageHtml, newsDetailHtml, recruitPageHtml, contactBtnHtml, contactFormPageHtml };

@@ -62,6 +62,9 @@ app.get('/', (req, res) => {
   html = injectBetween(html, 'SERVICES', render.servicesHtml(c.services));
   html = injectBetween(html, 'WORKS', render.worksHtml(c.works.slice(0, 3)));   // top page: first 3
   html = injectBetween(html, 'WORKS_PAGE', render.worksPageHtml(c.works));       // list page: all
+  html = injectBetween(html, 'NEWS', render.newsItemsHtml(c.news.slice(0, 3)));      // top page: latest 3
+  html = injectBetween(html, 'NEWS_PAGE', render.newsPageHtml(c.news));             // list page: all
+  html = injectBetween(html, 'NEWS_DETAIL', render.newsDetailHtml(c.news));         // detail articles
   html = injectBetween(html, 'RECRUIT_PAGE', render.recruitPageHtml(c.recruit));
   html = injectBetween(html, 'CONTACT', render.contactBtnHtml(c.settings));
   html = injectBetween(html, 'CONTACT_PAGE', render.contactFormPageHtml(c.settings));
@@ -235,6 +238,49 @@ app.post('/admin/work/:id/delete', requireAuth, (req, res) => {
   const gone = c.works.find(w => w.id === req.params.id);
   if (gone) removeUpload(gone.image);
   c.works = c.works.filter(w => w.id !== req.params.id);
+  store.saveContent(c);
+  res.redirect('/admin?ok=1');
+});
+
+// ---- News ----
+app.get('/admin/news/new', requireAuth, (req, res) => res.type('html').send(views.newsForm(null, true)));
+app.get('/admin/news/:id', requireAuth, (req, res) => {
+  const it = store.getContent().news.find(n => n.id === req.params.id);
+  if (!it) return res.redirect('/admin');
+  res.type('html').send(views.newsForm(it, false));
+});
+function readNewsFields(body) {
+  return {
+    date: (body.date || '').trim().slice(0, 10),
+    title: (body.title || '').trim().slice(0, 200),
+    body: (body.body || '').trim().slice(0, 20000),
+  };
+}
+app.post('/admin/news', requireAuth, (req, res) => {
+  const f = readNewsFields(req.body);
+  if (!f.title || !/^\d{4}-\d{2}-\d{2}$/.test(f.date)) {
+    return res.status(400).type('html').send(views.newsForm(f, true, '日付とタイトルは必須です。'));
+  }
+  const c = store.getContent();
+  c.news.push({ id: store.nextId('n', c.news), ...f });
+  store.saveContent(c);
+  res.redirect('/admin?ok=1');
+});
+app.post('/admin/news/:id', requireAuth, (req, res) => {
+  const c = store.getContent();
+  const it = c.news.find(n => n.id === req.params.id);
+  if (!it) return res.redirect('/admin');
+  const f = readNewsFields(req.body);
+  if (!f.title || !/^\d{4}-\d{2}-\d{2}$/.test(f.date)) {
+    return res.status(400).type('html').send(views.newsForm({ ...it, ...f }, false, '日付とタイトルは必須です。'));
+  }
+  Object.assign(it, f);
+  store.saveContent(c);
+  res.redirect('/admin?ok=1');
+});
+app.post('/admin/news/:id/delete', requireAuth, (req, res) => {
+  const c = store.getContent();
+  c.news = c.news.filter(n => n.id !== req.params.id);
   store.saveContent(c);
   res.redirect('/admin?ok=1');
 });
