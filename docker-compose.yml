@@ -1,0 +1,24 @@
+services:
+  coral:
+    build: .
+    container_name: coral-cms
+    ports:
+      - "3000:3000"            # http://localhost:3000
+    environment:
+      HOST: 0.0.0.0
+      # Seeds the admin password ONLY on first run (ignored once set).
+      # Change it afterwards with:
+      #   docker compose exec coral node server/scripts/set-password.js 'new-password'
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-pass2026}
+      # Set a long random value so logins survive container restarts:
+      SESSION_SECRET: ${SESSION_SECRET:-please-change-this-long-random-string}
+      # Set to "1" once the site is served over HTTPS
+      COOKIE_SECURE: "0"
+    volumes:
+      - coral-data:/app/server/data        # CMS content, admin password, inquiries
+      - coral-uploads:/app/assets/uploads  # images uploaded via the admin
+    restart: unless-stopped
+
+volumes:
+  coral-data:
+  coral-uploads:

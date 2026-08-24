@@ -56,7 +56,7 @@ ${error ? `<div class="err">${esc(error)}</div>` : ''}
 <button type="submit">ログイン</button></form></body></html>`;
 }
 
-function dashboard(content, flash) {
+function dashboard(content, flash, inquiryCount) {
   const svc = content.services.map(s => `
     <div class="card">
       ${s.images && s.images[0] ? `<img src="/${esc(s.images[0].src)}" alt="">` : '<img alt="">'}
@@ -79,6 +79,18 @@ function dashboard(content, flash) {
     ${svc || '<p class="muted">まだ項目がありません。</p>'}
     <h2>Works（実績）<a class="btn sm" style="float:right" href="/admin/work/new">＋ 追加</a></h2>
     ${wk || '<p class="muted">まだ項目がありません。</p>'}
+    <h2>News（お知らせ）<a class="btn sm" style="float:right" href="/admin/news/new">＋ 追加</a></h2>
+    ${content.news.map(n => `
+    <div class="card">
+      <div class="grow"><b>${esc(n.title)}</b><small>${esc(String(n.date||'').replace(/-/g,'.'))}</small></div>
+      <a class="btn ghost sm" href="/admin/news/${esc(n.id)}">編集</a>
+      <form method="post" action="/admin/news/${esc(n.id)}/delete" onsubmit="return confirm('「${esc(n.title)}」を削除しますか？')"><button class="btn danger sm">削除</button></form>
+    </div>`).join('') || '<p class="muted">まだお知らせがありません。</p>'}
+    <h2>お問い合わせ受信箱${typeof inquiryCount==='number' ? `（${inquiryCount}件）` : ''}<a class="btn sm" style="float:right" href="/admin/inquiries">開く</a></h2>
+    <div class="card"><div class="grow"><b>フォームからのお問い合わせ</b><small>サイトの「お問い合わせ」フォームで送信された内容が届きます</small></div></div>
+    <h2>お問い合わせ設定</h2>
+    <div class="card"><div class="grow"><b>連絡先（メール・電話）</b><small>設定するとサイトの「お問い合わせ」ボタンが有効になります</small></div>
+      <a class="btn ghost sm" href="/admin/settings">編集</a></div>
     <h2>Recruit（採用ページ）</h2>
     <div class="card"><div class="grow"><b>採用ページの文言・見出し</b><small>クリックで表示されるページの内容</small></div>
       <a class="btn ghost sm" href="/admin/recruit">編集</a></div>
@@ -152,4 +164,50 @@ function recruitForm(r, scenes) {
     </form>`);
 }
 
-module.exports = { layout, loginPage, dashboard, serviceForm, workForm, recruitForm };
+function inquiriesList(list) {
+  const rows = list.map(q => `
+    <div class="card" style="align-items:flex-start">
+      <div class="grow">
+        <b>${esc(q.name)}</b>
+        <small>${esc((q.at || '').replace('T', ' ').slice(0, 16))} · <a href="mailto:${esc(q.email)}">${esc(q.email)}</a>${q.phone ? ' · ' + esc(q.phone) : ''}</small>
+        <p style="margin:8px 0 0;white-space:pre-wrap;font-size:14px">${esc(q.message)}</p>
+      </div>
+      <form method="post" action="/admin/inquiries/${esc(q.id)}/delete" onsubmit="return confirm('この問い合わせを削除しますか？')"><button class="btn danger sm">削除</button></form>
+    </div>`).join('');
+  return layout('お問い合わせ受信箱', `
+    <p><a href="/admin">← 戻る</a></p>
+    <h1>お問い合わせ受信箱</h1>
+    ${rows || '<p class="muted">まだお問い合わせはありません。</p>'}
+  `);
+}
+
+function newsForm(item, isNew, err) {
+  item = item || {};
+  return layout(isNew ? 'お知らせ追加' : 'お知らせ編集', `
+    <p><a href="/admin">← 戻る</a></p>
+    <h1>${isNew ? 'お知らせを追加' : 'お知らせを編集'}</h1>
+    ${err ? `<div class="err">${esc(err)}</div>` : ''}
+    <form method="post" action="/admin/news${isNew ? '' : '/' + esc(item.id)}">
+      <label>日付</label><input type="date" name="date" value="${esc(item.date)}" required style="width:auto;padding:9px 11px;border:1px solid #cdc7ba;border-radius:8px;font:inherit">
+      <label>タイトル</label><input type="text" name="title" value="${esc(item.title)}" required>
+      <label>本文</label><textarea name="body" style="min-height:220px">${esc(item.body)}</textarea>
+      <div class="hint">空行で段落が分かれます。HTMLタグもそのまま使えます。</div>
+      <div class="row" style="margin-top:22px"><button class="btn" type="submit">保存</button><a class="btn ghost" href="/admin">キャンセル</a></div>
+    </form>`);
+}
+
+function settingsForm(st, err) {
+  st = st || {};
+  return layout('お問い合わせ設定', `
+    <p><a href="/admin">← 戻る</a></p>
+    <h1>お問い合わせ設定</h1>
+    ${err ? `<div class="err">${esc(err)}</div>` : ''}
+    <p class="muted">メールアドレスを設定すると「お問い合わせ」ボタンがメール作成画面を開くようになります。メール未設定で電話番号のみの場合は電話発信リンクになります。</p>
+    <form method="post" action="/admin/settings">
+      <label>お問い合わせ用メールアドレス</label><input type="text" name="contactEmail" value="${esc(st.contactEmail)}" placeholder="info@example.co.jp">
+      <label>電話番号（任意）</label><input type="text" name="contactPhone" value="${esc(st.contactPhone)}" placeholder="0980-00-0000">
+      <div class="row" style="margin-top:22px"><button class="btn" type="submit">保存</button><a class="btn ghost" href="/admin">キャンセル</a></div>
+    </form>`);
+}
+
+module.exports = { layout, loginPage, dashboard, serviceForm, workForm, recruitForm, settingsForm, inquiriesList, newsForm };

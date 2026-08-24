@@ -9,7 +9,10 @@
       "scene": "sc-room",
       "caption": "",
       "images": [
-        { "src": "assets/img/service-housekeeping.jpg", "alt": "客室清掃・ハウスキーピング" }
+        {
+          "src": "assets/img/service-housekeeping.jpg",
+          "alt": "客室清掃・ハウスキーピング"
+        }
       ]
     },
     {
@@ -21,7 +24,10 @@
       "scene": "sc-villa",
       "caption": "",
       "images": [
-        { "src": "assets/img/service-operation.jpg", "alt": "宿泊施設の運営受託" }
+        {
+          "src": "assets/img/service-operation.jpg",
+          "alt": "宿泊施設の運営受託"
+        }
       ]
     },
     {
@@ -33,9 +39,18 @@
       "scene": "sc-villa",
       "caption": "開発計画イメージ",
       "images": [
-        { "src": "assets/img/development-01.jpg", "alt": "開発計画 外観" },
-        { "src": "assets/img/development-02.jpg", "alt": "開発計画 ラウンジ" },
-        { "src": "assets/img/development-03.jpg", "alt": "開発計画 バスルーム" }
+        {
+          "src": "assets/img/development-01.jpg",
+          "alt": "開発計画 外観"
+        },
+        {
+          "src": "assets/img/development-02.jpg",
+          "alt": "開発計画 ラウンジ"
+        },
+        {
+          "src": "assets/img/development-03.jpg",
+          "alt": "開発計画 バスルーム"
+        }
       ]
     },
     {
@@ -47,7 +62,10 @@
       "scene": "sc-coral",
       "caption": "沖縄海底美術館",
       "images": [
-        { "src": "assets/img/coral-museum.jpg", "alt": "沖縄海底美術館とサンゴ移植" }
+        {
+          "src": "assets/img/coral-museum.jpg",
+          "alt": "沖縄海底美術館とサンゴ移植"
+        }
       ]
     }
   ],
@@ -90,5 +108,25 @@
     "headJp": "スタッフ募集",
     "headImg": "assets/img/message-hero.jpg",
     "bodyHtml": "<p>（このページの文言は後ほど差し替えます。）</p><p>未経験から始めたスタッフがほとんどです。清掃スタッフ、フロント、マネージャー候補を募集しています。ご応募・お問い合わせをお待ちしています。</p>"
-  }
+  },
+  "news": [
+    {
+      "id": "n1",
+      "date": "2026-08-01",
+      "title": "受託施設を更新いたしました",
+      "body": "（この記事の本文は後ほど追加します。）"
+    },
+    {
+      "id": "n2",
+      "date": "2026-07-20",
+      "title": "夏季休業のお知らせ",
+      "body": "（この記事の本文は後ほど追加します。）"
+    },
+    {
+      "id": "n3",
+      "date": "2026-06-11",
+      "title": "本部町の宿泊施設の運営を開始しました",
+      "body": "（この記事の本文は後ほど追加します。）"
+    }
+  ]
 }

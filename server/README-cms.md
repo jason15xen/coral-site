@@ -54,3 +54,19 @@ ssh root@162.43.37.193 'cd /var/www/coral/server && npm install --omit=dev && sy
 
 (`index.html` here is the **template** with the `<!--CMS:…-->` markers; the app injects
 Service/Works/Recruit into it at request time.)
+
+## Docker
+
+```bash
+docker compose up -d --build     # build & run  → http://localhost:3000
+docker compose logs -f           # logs
+docker compose down              # stop (data persists in named volumes)
+```
+
+- Admin: http://localhost:3000/admin — first run seeds the password from
+  `ADMIN_PASSWORD` in docker-compose.yml.
+  Change it: `docker compose exec coral node server/scripts/set-password.js 'new-password'`
+- Persistent data lives in named volumes: `coral-data` (content, password,
+  inquiries) and `coral-uploads` (admin-uploaded images). `docker compose down -v`
+  DELETES them — omit `-v` to keep data.
+- Override env via shell or a `.env` file: `ADMIN_PASSWORD`, `SESSION_SECRET`.

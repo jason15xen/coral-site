@@ -22,6 +22,7 @@ const app = express();
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: '32kb' }));
 
 // ---- uploads ----
 const storage = multer.diskStorage({
@@ -59,11 +60,43 @@ app.get('/', (req, res) => {
   const c = store.getContent();
   let html = template();
   html = injectBetween(html, 'SERVICES', render.servicesHtml(c.services));
-  html = injectBetween(html, 'WORKS', render.worksHtml(c.works));
+  html = injectBetween(html, 'WORKS', render.worksHtml(c.works.slice(0, 3)));   // top page: first 3
+  html = injectBetween(html, 'WORKS_PAGE', render.worksPageHtml(c.works));       // list page: all
+  html = injectBetween(html, 'NEWS', render.newsItemsHtml(c.news.slice(0, 3)));      // top page: latest 3
+  html = injectBetween(html, 'NEWS_PAGE', render.newsPageHtml(c.news));             // list page: all
+  html = injectBetween(html, 'NEWS_DETAIL', render.newsDetailHtml(c.news));         // detail articles
   html = injectBetween(html, 'RECRUIT_PAGE', render.recruitPageHtml(c.recruit));
+  html = injectBetween(html, 'CONTACT', render.contactBtnHtml(c.settings));
+  html = injectBetween(html, 'CONTACT_PAGE', render.contactFormPageHtml(c.settings));
+  // social/SEO tags need absolute URLs — derive from the request (trust proxy is on)
+  const origin = req.protocol + '://' + req.get('host');
+  html = html
+    .replace('<meta property="og:image" content="assets/img/message-hero.jpg">', `<meta property="og:image" content="${origin}/assets/img/message-hero.jpg">\n<meta property="og:url" content="${origin}/">\n<link rel="canonical" href="${origin}/">`);
   res.type('html').send(html);
 });
 app.get('/api/content', (req, res) => res.json(store.getContent()));
+
+// ---- public inquiry endpoint (contact form) ----
+const inquiryHits = new Map();
+app.post('/api/inquiry', (req, res) => {
+  const h = inquiryHits.get(req.ip);
+  if (h && Date.now() - h.ts < 10 * 60 * 1000 && h.count >= 5) {
+    return res.status(429).json({ ok: false, error: '送信が多すぎます。しばらくしてからお試しください。' });
+  }
+  const b = req.body || {};
+  if ((b.website || '').trim()) return res.json({ ok: true });   // honeypot: pretend success
+  const name = String(b.name || '').trim().slice(0, 100);
+  const email = String(b.email || '').trim().slice(0, 200);
+  const phone = String(b.phone || '').trim().slice(0, 40);
+  const message = String(b.message || '').trim().slice(0, 4000);
+  if (!name || !message || !/^\S+@\S+\.\S+$/.test(email)) {
+    return res.status(400).json({ ok: false, error: 'お名前・メールアドレス・お問い合わせ内容をご確認ください。' });
+  }
+  if (!h || Date.now() - h.ts >= 10 * 60 * 1000) inquiryHits.set(req.ip, { count: 1, ts: Date.now() });
+  else h.count++;
+  store.addInquiry({ id: crypto.randomUUID(), at: new Date().toISOString(), name, email, phone, message });
+  res.json({ ok: true });
+});
 
 // ================= AUTH =================
 app.use(session({
@@ -104,7 +137,7 @@ function requireAuth(req, res, next) {
 }
 
 // ================= ADMIN =================
-app.get('/admin', requireAuth, (req, res) => res.type('html').send(views.dashboard(store.getContent(), req.query.ok && '保存しました。')));
+app.get('/admin', requireAuth, (req, res) => res.type('html').send(views.dashboard(store.getContent(), req.query.ok && '保存しました。', store.getInquiries().length)));
 
 // ---- Service ----
 app.get('/admin/service/new', requireAuth, (req, res) => res.type('html').send(views.serviceForm(null, store.SCENES, true)));
@@ -213,6 +246,73 @@ app.post('/admin/work/:id/delete', requireAuth, (req, res) => {
   res.redirect('/admin?ok=1');
 });
 
+// ---- News ----
+app.get('/admin/news/new', requireAuth, (req, res) => res.type('html').send(views.newsForm(null, true)));
+app.get('/admin/news/:id', requireAuth, (req, res) => {
+  const it = store.getContent().news.find(n => n.id === req.params.id);
+  if (!it) return res.redirect('/admin');
+  res.type('html').send(views.newsForm(it, false));
+});
+function readNewsFields(body) {
+  return {
+    date: (body.date || '').trim().slice(0, 10),
+    title: (body.title || '').trim().slice(0, 200),
+    body: (body.body || '').trim().slice(0, 20000),
+  };
+}
+app.post('/admin/news', requireAuth, (req, res) => {
+  const f = readNewsFields(req.body);
+  if (!f.title || !/^\d{4}-\d{2}-\d{2}$/.test(f.date)) {
+    return res.status(400).type('html').send(views.newsForm(f, true, '日付とタイトルは必須です。'));
+  }
+  const c = store.getContent();
+  c.news.push({ id: store.nextId('n', c.news), ...f });
+  store.saveContent(c);
+  res.redirect('/admin?ok=1');
+});
+app.post('/admin/news/:id', requireAuth, (req, res) => {
+  const c = store.getContent();
+  const it = c.news.find(n => n.id === req.params.id);
+  if (!it) return res.redirect('/admin');
+  const f = readNewsFields(req.body);
+  if (!f.title || !/^\d{4}-\d{2}-\d{2}$/.test(f.date)) {
+    return res.status(400).type('html').send(views.newsForm({ ...it, ...f }, false, '日付とタイトルは必須です。'));
+  }
+  Object.assign(it, f);
+  store.saveContent(c);
+  res.redirect('/admin?ok=1');
+});
+app.post('/admin/news/:id/delete', requireAuth, (req, res) => {
+  const c = store.getContent();
+  c.news = c.news.filter(n => n.id !== req.params.id);
+  store.saveContent(c);
+  res.redirect('/admin?ok=1');
+});
+
+// ---- Inquiries (admin inbox) ----
+app.get('/admin/inquiries', requireAuth, (req, res) => res.type('html').send(views.inquiriesList(store.getInquiries())));
+app.post('/admin/inquiries/:id/delete', requireAuth, (req, res) => {
+  store.deleteInquiry(req.params.id);
+  res.redirect('/admin/inquiries');
+});
+
+// ---- Settings (contact) ----
+app.get('/admin/settings', requireAuth, (req, res) => res.type('html').send(views.settingsForm(store.getContent().settings)));
+app.post('/admin/settings', requireAuth, (req, res) => {
+  const email = (req.body.contactEmail || '').trim();
+  const phone = (req.body.contactPhone || '').trim();
+  if (email && !/^\S+@\S+\.\S+$/.test(email)) {
+    return res.status(400).type('html').send(views.settingsForm({ contactEmail: email, contactPhone: phone }, 'メールアドレスの形式が正しくありません。'));
+  }
+  if (phone && !/^[+\d][\d\s\-()]{5,}$/.test(phone)) {
+    return res.status(400).type('html').send(views.settingsForm({ contactEmail: email, contactPhone: phone }, '電話番号の形式が正しくありません。'));
+  }
+  const c = store.getContent();
+  c.settings = { ...c.settings, contactEmail: email, contactPhone: phone };
+  store.saveContent(c);
+  res.redirect('/admin?ok=1');
+});
+
 // ---- Recruit ----
 app.get('/admin/recruit', requireAuth, (req, res) => res.type('html').send(views.recruitForm(store.getContent().recruit, store.SCENES)));
 app.post('/admin/recruit', requireAuth, upload.single('headImg'), (req, res) => {
@@ -236,4 +336,5 @@ app.use((err, req, res, next) => {
   res.status(500).type('html').send('<p style="font-family:sans-serif;padding:24px">エラーが発生しました。<a href="javascript:history.back()">← 戻る</a></p>');
 });
 
-app.listen(PORT, '127.0.0.1', () => console.log(`Coral CMS listening on http://127.0.0.1:${PORT}`));
+const HOST = process.env.HOST || '127.0.0.1';   // Docker sets HOST=0.0.0.0
+app.listen(PORT, HOST, () => console.log(`Coral CMS listening on http://${HOST}:${PORT}`));
