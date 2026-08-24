@@ -22,10 +22,10 @@ function serviceRow(it) {
   let media;
   if (isSlide) {
     media = imgs.map((im, i) =>
-      `<img class="slide__img${i === 0 ? ' on' : ''}" src="${esc(im.src)}" alt="${esc(im.alt)}">`
+      `<img class="slide__img${i === 0 ? ' on' : ''}" src="${esc(im.src)}" alt="${esc(im.alt)}" loading="lazy" decoding="async">`
     ).join('\n        ') + '\n        <span class="slide__dots"></span>';
   } else if (imgs.length === 1) {
-    media = `<img class="shot on" src="${esc(imgs[0].src)}" alt="${esc(imgs[0].alt)}">`;
+    media = `<img class="shot on" src="${esc(imgs[0].src)}" alt="${esc(imgs[0].alt)}" loading="lazy" decoding="async">`;
   } else {
     media = '';
   }
@@ -49,14 +49,19 @@ function servicesHtml(list) {
 
 function workCard(it) {
   const scene = it.scene || 'sc-villa';
-  const url = it.url && it.url.trim() ? it.url.trim() : '#';
-  return `      <a href="${esc(url)}" class="work">
+  const url = it.url && it.url.trim() ? it.url.trim() : '';
+  const inner = `
         <div class="ph work__img">
           <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#${esc(scene)}"/></svg>
-          <img class="shot on" src="${esc(it.image)}" alt="${esc(it.name)}">
+          <img class="shot on" src="${esc(it.image)}" alt="${esc(it.name)}" loading="lazy" decoding="async">
         </div>
         <p class="work__meta"><span>${esc(it.metaEn)}</span><span>${esc(it.metaJp)}</span></p>
-        <p class="work__name">${esc(it.name)}</p>
+        <p class="work__name">${esc(it.name)}</p>`;
+  // No URL yet → plain card (no pointer cursor, no dead link)
+  if (!url || url === '#') return `      <div class="work work--static">${inner}
+      </div>`;
+  const ext = /^https?:/i.test(url) ? ' target="_blank" rel="noopener"' : '';
+  return `      <a href="${esc(url)}" class="work"${ext}>${inner}
       </a>`;
 }
 
@@ -68,7 +73,7 @@ function worksHtml(list) {
 function worksPageHtml(list) {
   return `
   <section class="page-head">
-    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="Works">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="Works" loading="lazy" decoding="async">
     <div class="page-head__mask"></div>
     <div class="page-head__txt">
       <p class="eyebrow" style="color:var(--sand)">Works</p>
@@ -102,7 +107,7 @@ function newsItemsHtml(list) {
 function newsPageHtml(list) {
   return `
   <section class="page-head">
-    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="News">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="News" loading="lazy" decoding="async">
     <div class="page-head__mask"></div>
     <div class="page-head__txt">
       <p class="eyebrow" style="color:var(--sand)">News</p>
@@ -131,7 +136,7 @@ function recruitPageHtml(r) {
   r = r || {};
   return `
   <section class="page-head">
-    <img class="page-head__img" src="${esc(r.headImg || 'assets/img/message-hero.jpg')}" alt="${esc(r.headJp || 'Recruit')}">
+    <img class="page-head__img" src="${esc(r.headImg || 'assets/img/message-hero.jpg')}" alt="${esc(r.headJp || 'Recruit')}" loading="lazy" decoding="async">
     <div class="page-head__mask"></div>
     <div class="page-head__txt">
       <p class="eyebrow" style="color:var(--sand)">${esc(r.headEyebrow || 'Recruit')}</p>

@@ -13,7 +13,9 @@
 <meta property="og:image" content="assets/img/message-hero.jpg">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%230d1f27%27/%3E%3Cpath d=%27M6 20c3-3 5-1 8-3s4-4 7-4 5 2 5 2-2 6-8 8-12-3-12-3z%27 fill=%27%23c9a86a%27/%3E%3C/svg%3E">
 <title>Coral Resort Management 株式会社｜沖縄の宿泊施設運営・客室清掃・不動産開発</title>
-<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500&family=Zen+Old+Mincho:wght@400;500;600&family=Zen+Kaku+Gothic+New:wght@300;400;500&family=Yuji+Mai&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:wght@300;400;500&family=Zen+Old+Mincho:wght@400;500&family=Zen+Kaku+Gothic+New:wght@300;400;500&family=Yuji+Mai&display=swap" rel="stylesheet">
 <style>
 :root{
   --ink:#0B1D26;--deep:#123243;--sea:#2F6B72;--shallow:#7FB0AC;--aqua:#A8D8D0;
@@ -304,6 +306,29 @@ body.modal-open{overflow:hidden}
   .hero__horizon{transform:scaleX(1)}
   .hero__eyebrow,.hero__copy span,.hero__lead{opacity:1}
 }
+/* ---- UX pass: tap targets, legibility, orientation, a11y ---- */
+.skip{position:absolute;left:-9999px;top:10px;z-index:100;background:var(--ink);color:#fff;padding:10px 16px;font-size:13px;letter-spacing:.1em}
+.skip:focus{left:10px}
+.hd__nav a{position:relative}
+.hd__nav a.is-active::after{content:"";position:absolute;left:2px;right:2px;bottom:0;height:1px;background:currentColor;opacity:.75}
+.more{position:relative}
+@media(hover:none){.more::after{content:"";position:absolute;left:0;right:0;top:-10px;bottom:-10px}}
+.totop{position:fixed;right:18px;bottom:18px;z-index:50;width:46px;height:46px;border:1px solid rgba(250,249,246,.45);background:rgba(11,29,38,.82);color:#fff;backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;font-family:var(--util);font-size:15px;cursor:pointer;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .4s,transform .4s,visibility .4s}
+.totop.on{opacity:1;visibility:visible;transform:none}
+@media(hover:hover){.totop:hover{background:var(--sand);border-color:var(--sand);color:var(--ink)}}
+body.modal-open .totop,body.nav-open .totop{opacity:0;visibility:hidden}
+.page{animation:pgfade .5s ease both}
+@keyframes pgfade{from{opacity:0}to{opacity:1}}
+.work--static{cursor:default}
+@media(hover:hover){.work--static:hover .work__img .scene,.work--static:hover .work__img .shot{transform:none}}
+@media(max-width:900px){.hd__menu{padding:15px 4px}}
+@media(max-width:600px){
+  .sec__index{font-size:11px}
+  .work__meta,.news__date{font-size:11.5px}
+  .cap,.band-sea__en{font-size:11px}
+  .hd__logo{font-size:12px}
+  .totop{right:14px;bottom:14px;width:44px;height:44px}
+}
 </style>
 </head>
 <body>
@@ -499,6 +524,7 @@ body.modal-open{overflow:hidden}
 
 <!-- 公開時はこの1行を削除してください -->
 
+<a class="skip" href="#page-top">本文へスキップ</a>
 <header class="hd" id="hd">
   <a href="#top" class="hd__logo" data-page="top"><span>Coral</span><span>Resort</span><span>Management</span></a>
   <nav class="hd__nav">
@@ -574,7 +600,7 @@ body.modal-open{overflow:hidden}
         </div>
         <div class="ph svc__thumb">
           <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-room"/></svg>
-          <img class="shot on" src="assets/img/service-housekeeping.jpg" alt="客室清掃・ハウスキーピング">
+          <img class="shot on" src="assets/img/service-housekeeping.jpg" alt="客室清掃・ハウスキーピング" loading="lazy" decoding="async">
         </div>
       </div>
       <div class="svc__row">
@@ -585,7 +611,7 @@ body.modal-open{overflow:hidden}
         </div>
         <div class="ph svc__thumb">
           <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
-          <img class="shot on" src="assets/img/service-operation.jpg" alt="宿泊施設の運営受託">
+          <img class="shot on" src="assets/img/service-operation.jpg" alt="宿泊施設の運営受託" loading="lazy" decoding="async">
         </div>
       </div>
       <div class="svc__row">
@@ -596,9 +622,9 @@ body.modal-open{overflow:hidden}
         </div>
         <div class="ph svc__thumb slide">
           <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
-          <img class="slide__img on" src="assets/img/development-01.jpg" alt="開発計画 外観">
-        <img class="slide__img" src="assets/img/development-02.jpg" alt="開発計画 ラウンジ">
-        <img class="slide__img" src="assets/img/development-03.jpg" alt="開発計画 バスルーム">
+          <img class="slide__img on" src="assets/img/development-01.jpg" alt="開発計画 外観" loading="lazy" decoding="async">
+        <img class="slide__img" src="assets/img/development-02.jpg" alt="開発計画 ラウンジ" loading="lazy" decoding="async">
+        <img class="slide__img" src="assets/img/development-03.jpg" alt="開発計画 バスルーム" loading="lazy" decoding="async">
         <span class="slide__dots"></span>
         <span class="cap">開発計画イメージ</span>
         </div>
@@ -611,7 +637,7 @@ body.modal-open{overflow:hidden}
         </div>
         <div class="ph svc__thumb">
           <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-coral"/></svg>
-          <img class="shot on" src="assets/img/coral-museum.jpg" alt="沖縄海底美術館とサンゴ移植">
+          <img class="shot on" src="assets/img/coral-museum.jpg" alt="沖縄海底美術館とサンゴ移植" loading="lazy" decoding="async">
         <span class="cap">沖縄海底美術館</span>
         </div>
       </div>
@@ -626,30 +652,30 @@ body.modal-open{overflow:hidden}
     <h2 class="sec__title sec__title--en">Works</h2>
   </div>
   <div class="works rv"><!--CMS:WORKS-->
-      <a href="#" class="work">
+      <div class="work work--static">
         <div class="ph work__img">
           <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
-          <img class="shot on" src="assets/img/works-yawnyard-kouri.jpg" alt="ヨーンヤード古宇利島">
+          <img class="shot on" src="assets/img/works-yawnyard-kouri.jpg" alt="ヨーンヤード古宇利島" loading="lazy" decoding="async">
         </div>
         <p class="work__meta"><span>Kouri Island</span><span>今帰仁村</span></p>
         <p class="work__name">ヨーンヤード古宇利島</p>
-      </a>
-      <a href="#" class="work">
+      </div>
+      <div class="work work--static">
         <div class="ph work__img">
           <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-pool"/></svg>
-          <img class="shot on" src="assets/img/works-poolvilla-amaha.jpg" alt="プールヴィラ天羽">
+          <img class="shot on" src="assets/img/works-poolvilla-amaha.jpg" alt="プールヴィラ天羽" loading="lazy" decoding="async">
         </div>
         <p class="work__meta"><span>Unten</span><span>今帰仁村</span></p>
         <p class="work__name">プールヴィラ天羽</p>
-      </a>
-      <a href="#" class="work">
+      </div>
+      <div class="work work--static">
         <div class="ph work__img">
           <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-building"/></svg>
-          <img class="shot on" src="assets/img/works-lieta-nakayama.jpg" alt="リエッタ中山">
+          <img class="shot on" src="assets/img/works-lieta-nakayama.jpg" alt="リエッタ中山" loading="lazy" decoding="async">
         </div>
         <p class="work__meta"><span>Nago</span><span>名護市</span></p>
         <p class="work__name">リエッタ中山</p>
-      </a>
+      </div>
     <!--/CMS:WORKS-->
   </div>
   <p style="margin-top:44px" class="rv"><a href="#workslist" class="more" data-page="workslist">All works →</a></p>
@@ -721,7 +747,7 @@ body.modal-open{overflow:hidden}
 
 <main id="page-company" class="page" hidden>
   <section class="page-head">
-    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="沖縄の海">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="沖縄の海" loading="lazy" decoding="async">
     <div class="page-head__mask"></div>
     <div class="page-head__txt">
       <p class="eyebrow" style="color:var(--sand)">Message / Company info</p>
@@ -762,7 +788,7 @@ body.modal-open{overflow:hidden}
 
 <main id="page-recruit" class="page" hidden><!--CMS:RECRUIT_PAGE-->
   <section class="page-head">
-    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="スタッフ募集">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="スタッフ募集" loading="lazy" decoding="async">
     <div class="page-head__mask"></div>
     <div class="page-head__txt">
       <p class="eyebrow" style="color:var(--sand)">Recruit</p>
@@ -780,7 +806,7 @@ body.modal-open{overflow:hidden}
 
 <main id="page-workslist" class="page" hidden><!--CMS:WORKS_PAGE-->
   <section class="page-head">
-    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="Works">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="Works" loading="lazy" decoding="async">
     <div class="page-head__mask"></div>
     <div class="page-head__txt">
       <p class="eyebrow" style="color:var(--sand)">Works</p>
@@ -791,37 +817,37 @@ body.modal-open{overflow:hidden}
   </section>
   <section class="sec">
     <div class="works rv">
-      <a href="#" class="work">
+      <div class="work work--static">
         <div class="ph work__img">
           <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-villa"/></svg>
-          <img class="shot on" src="assets/img/works-yawnyard-kouri.jpg" alt="ヨーンヤード古宇利島">
+          <img class="shot on" src="assets/img/works-yawnyard-kouri.jpg" alt="ヨーンヤード古宇利島" loading="lazy" decoding="async">
         </div>
         <p class="work__meta"><span>Kouri Island</span><span>今帰仁村</span></p>
         <p class="work__name">ヨーンヤード古宇利島</p>
-      </a>
-      <a href="#" class="work">
+      </div>
+      <div class="work work--static">
         <div class="ph work__img">
           <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-pool"/></svg>
-          <img class="shot on" src="assets/img/works-poolvilla-amaha.jpg" alt="プールヴィラ天羽">
+          <img class="shot on" src="assets/img/works-poolvilla-amaha.jpg" alt="プールヴィラ天羽" loading="lazy" decoding="async">
         </div>
         <p class="work__meta"><span>Unten</span><span>今帰仁村</span></p>
         <p class="work__name">プールヴィラ天羽</p>
-      </a>
-      <a href="#" class="work">
+      </div>
+      <div class="work work--static">
         <div class="ph work__img">
           <svg class="scene" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice"><use href="#sc-building"/></svg>
-          <img class="shot on" src="assets/img/works-lieta-nakayama.jpg" alt="リエッタ中山">
+          <img class="shot on" src="assets/img/works-lieta-nakayama.jpg" alt="リエッタ中山" loading="lazy" decoding="async">
         </div>
         <p class="work__meta"><span>Nago</span><span>名護市</span></p>
         <p class="work__name">リエッタ中山</p>
-      </a>
+      </div>
     </div>
     <p style="margin-top:44px"><a href="#top" class="more" data-page="top">← Back to top</a></p>
   </section><!--/CMS:WORKS_PAGE--></main>
 
 <main id="page-newslist" class="page" hidden><!--CMS:NEWS_PAGE-->
   <section class="page-head">
-    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="News">
+    <img class="page-head__img" src="assets/img/message-hero.jpg" alt="News" loading="lazy" decoding="async">
     <div class="page-head__mask"></div>
     <div class="page-head__txt">
       <p class="eyebrow" style="color:var(--sand)">News</p>
@@ -893,6 +919,8 @@ body.modal-open{overflow:hidden}
   </script><!--/CMS:CONTACT_PAGE--></div>
 </div>
 
+<button class="totop" id="toTop" type="button" aria-label="ページ上部へ戻る">↑</button>
+
 <footer class="ft">
   <div class="ft__top">
     <div>
@@ -904,8 +932,13 @@ body.modal-open{overflow:hidden}
 </footer>
 
 <script>
-const hd=document.getElementById('hd');
-function syncHeader(){hd.classList.toggle('solid',pages.top.hidden||scrollY>innerHeight*0.82)}
+const hd=document.getElementById('hd'),toTop=document.getElementById('toTop');
+toTop.addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+/* 現在地インジケーター（TOPページのセクション） */
+const navLinks=[...document.querySelectorAll('.hd__nav a[href^="#"]:not([data-page]):not(.hd__cta)')];
+const secIO=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){navLinks.forEach(a=>a.classList.toggle('is-active',a.getAttribute('href')==='#'+e.target.id))}})},{rootMargin:'-40% 0px -55% 0px'});
+['about','service','works','news'].forEach(id=>{const el=document.getElementById(id);if(el)secIO.observe(el)});
+function syncHeader(){hd.classList.toggle('solid',pages.top.hidden||scrollY>innerHeight*0.82);toTop.classList.toggle('on',scrollY>innerHeight*0.8)}
 addEventListener('scroll',syncHeader,{passive:true});
 const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
 document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=(i%3)*90+'ms';io.observe(el)});
@@ -915,8 +948,10 @@ document.querySelectorAll('.slide').forEach(box=>{
   const dots=box.querySelector('.slide__dots');
   if(dots) imgs.forEach((_,i)=>{const d=document.createElement('i');if(i===0)d.className='on';dots.appendChild(d)});
   if(imgs.length<2||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let n=0;
+  let n=0,paused=false;
+  box.addEventListener('mouseenter',()=>{paused=true});box.addEventListener('mouseleave',()=>{paused=false});
   setInterval(()=>{
+    if(paused)return;
     imgs[n].classList.remove('on');
     if(dots) dots.children[n].classList.remove('on');
     n=(n+1)%imgs.length;
@@ -934,6 +969,7 @@ function showPage(name,anchor){
   document.body.classList.remove('nav-open');
   syncHeader();
   if(anchor){const t=document.getElementById(anchor);if(t){t.scrollIntoView();return}}
+  if(name!=='top')navLinks.forEach(a=>a.classList.remove('is-active'));
   if(changed)scrollTo(0,0);
 }
 document.querySelectorAll('[data-page]').forEach(el=>{
@@ -949,17 +985,18 @@ document.querySelectorAll('.hd__nav a[href^="#"]:not([data-page]), .drawer a[hre
 });
 /* モーダル（お知らせ詳細・お問い合わせフォーム） */
 const modalOf=h=>h.startsWith('#news-')?{id:'modal-news',news:h.slice(6)}:(h==='#inquiry'?{id:'modal-contact'}:null);
-let modalPushed=false;
+let modalPushed=false,modalTrigger=null;
 function openModal(id,newsId,push){
   const m=document.getElementById(id);if(!m)return;
+  if(!document.querySelector('.modal:not([hidden])'))modalTrigger=document.activeElement;
   document.querySelectorAll('.modal').forEach(x=>{x.hidden=(x!==m)});
-  if(id==='modal-news')m.querySelectorAll('article[data-news-id]').forEach(a=>{a.hidden=(a.dataset.newsId!==newsId)});
+  if(id==='modal-news'){m.querySelectorAll('article[data-news-id]').forEach(a=>{a.hidden=(a.dataset.newsId!==newsId)});const art=m.querySelector('article:not([hidden]) .news-detail__ttl');if(art)m.setAttribute('aria-label',art.textContent)}
   m.querySelector('.modal__panel').scrollTop=0;
   document.body.classList.add('modal-open');
   if(push){history.pushState(null,'',id==='modal-news'?'#news-'+newsId:'#inquiry');modalPushed=true}
   const c=m.querySelector('.modal__close');if(c)c.focus();
 }
-function hideModals(){document.querySelectorAll('.modal').forEach(x=>{x.hidden=true});document.body.classList.remove('modal-open')}
+function hideModals(){document.querySelectorAll('.modal').forEach(x=>{x.hidden=true});document.body.classList.remove('modal-open');if(modalTrigger&&modalTrigger.focus){modalTrigger.focus();modalTrigger=null}}
 function closeModal(){
   if(!document.querySelector('.modal:not([hidden])'))return;
   if(modalPushed){modalPushed=false;history.back();return}
@@ -969,16 +1006,19 @@ function closeModal(){
 document.querySelectorAll('[data-modal]').forEach(el=>{el.addEventListener('click',e=>{e.preventDefault();openModal(el.dataset.modal,el.dataset.news,true)})});
 document.querySelectorAll('.modal__close,.modal__bg').forEach(el=>el.addEventListener('click',closeModal));
 addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+/* モーダル内でフォーカスを循環させる */
+addEventListener('keydown',e=>{if(e.key!=='Tab')return;const m=document.querySelector('.modal:not([hidden])');if(!m)return;const f=[...m.querySelectorAll('a[href],button:not([disabled]),input:not([type=hidden]):not([tabindex="-1"]),textarea,select')].filter(x=>x.offsetParent!==null);if(!f.length)return;const first=f[0],last=f[f.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}});
 
-{const mh=modalOf(location.hash);if(mh)openModal(mh.id,mh.news,false);else if(pageFromHash()!=='top')showPage(pageFromHash());}
+{const mh=modalOf(location.hash);if(mh)openModal(mh.id,mh.news,false);else if(pageFromHash()!=='top'){showPage(pageFromHash());addEventListener('load',()=>scrollTo({top:0,behavior:'instant'}),{once:true})}}
 addEventListener('popstate',()=>{const mh=modalOf(location.hash);if(mh){openModal(mh.id,mh.news,false)}else{hideModals();modalPushed=false;showPage(pageFromHash())}});
 
 /* モバイルメニュー */
 const btn=document.getElementById('menuBtn'),drawer=document.getElementById('drawer');
-const closeNav=()=>{document.body.classList.remove('nav-open');btn.setAttribute('aria-expanded','false');drawer.setAttribute('aria-hidden','true')};
+const closeNav=()=>{document.body.classList.remove('nav-open');btn.setAttribute('aria-expanded','false');drawer.setAttribute('aria-hidden','true');drawer.inert=true};
+drawer.inert=true;
 btn.addEventListener('click',()=>{
   const open=document.body.classList.toggle('nav-open');
-  btn.setAttribute('aria-expanded',open);drawer.setAttribute('aria-hidden',!open);
+  btn.setAttribute('aria-expanded',open);drawer.setAttribute('aria-hidden',!open);drawer.inert=!open;
 });
 drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeNav));
 addEventListener('keydown',e=>{if(e.key==='Escape')closeNav()});

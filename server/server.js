@@ -68,6 +68,10 @@ app.get('/', (req, res) => {
   html = injectBetween(html, 'RECRUIT_PAGE', render.recruitPageHtml(c.recruit));
   html = injectBetween(html, 'CONTACT', render.contactBtnHtml(c.settings));
   html = injectBetween(html, 'CONTACT_PAGE', render.contactFormPageHtml(c.settings));
+  // social/SEO tags need absolute URLs — derive from the request (trust proxy is on)
+  const origin = req.protocol + '://' + req.get('host');
+  html = html
+    .replace('<meta property="og:image" content="assets/img/message-hero.jpg">', `<meta property="og:image" content="${origin}/assets/img/message-hero.jpg">\n<meta property="og:url" content="${origin}/">\n<link rel="canonical" href="${origin}/">`);
   res.type('html').send(html);
 });
 app.get('/api/content', (req, res) => res.json(store.getContent()));
