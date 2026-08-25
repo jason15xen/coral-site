@@ -158,6 +158,24 @@ function moveItem(list, id, dir) {
   const t = sorted[i].order; sorted[i].order = sorted[j].order; sorted[j].order = t;
   return true;
 }
+function applyOrder(list, ids) {
+  if (!Array.isArray(ids) || !ids.length) return false;
+  const known = new Set(list.map(x => x.id));
+  if (!ids.every(id => known.has(id))) return false;
+  const rank = new Map(ids.map((id, i) => [id, i + 1]));
+  list.forEach(x => { x.order = rank.has(x.id) ? rank.get(x.id) : ids.length + (x.order || 0); });
+  return true;
+}
+app.post('/admin/service/reorder', requireAuth, (req, res) => {
+  const c = store.getContent();
+  if (!applyOrder(c.services, req.body && req.body.ids)) return res.status(400).json({ ok: false });
+  store.saveContent(c); res.json({ ok: true });
+});
+app.post('/admin/work/reorder', requireAuth, (req, res) => {
+  const c = store.getContent();
+  if (!applyOrder(c.works, req.body && req.body.ids)) return res.status(400).json({ ok: false });
+  store.saveContent(c); res.json({ ok: true });
+});
 app.post('/admin/service/:id/move', requireAuth, (req, res) => {
   const c = store.getContent();
   if (moveItem(c.services, req.params.id, req.body.dir)) store.saveContent(c);

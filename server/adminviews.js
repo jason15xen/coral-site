@@ -84,7 +84,11 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .quick{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
 /* list rows */
 .list{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.row{display:grid;grid-template-columns:72px 1fr auto auto;gap:16px;align-items:center;padding:12px 18px;border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:22px 72px 1fr auto auto;gap:14px;align-items:center;padding:12px 18px;border-top:1px solid var(--line);background:#fff}
+.row .grip{color:#c4bfb4;cursor:grab;font-size:18px;line-height:1;user-select:none;letter-spacing:-3px}
+.row.dragging{opacity:.35}
+.row.over-top{box-shadow:inset 0 2px 0 var(--sand)}
+.row.over-bottom{box-shadow:inset 0 -2px 0 var(--sand)}
 .row:first-child{border-top:0}
 .row:hover{background:#fcfbf8}
 .row img,.row .noimg{width:72px;height:50px;object-fit:cover;border-radius:7px;background:#eeece6;display:block}
@@ -94,6 +98,7 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .row .ord form{display:contents}
 .row .act{display:flex;gap:6px;align-items:center}
 .row.news{grid-template-columns:110px 1fr auto}
+.row.news .grip{display:none}
 .row .date{font-size:12.5px;color:#2f6b72;letter-spacing:.06em;white-space:nowrap}
 .empty{padding:44px 20px;text-align:center;color:var(--mute)}
 .empty p{margin:0 0 14px}
@@ -115,7 +120,9 @@ input[type=file]{display:block;font-size:13px;padding:10px;border:1px dashed #cd
 .savebar{position:sticky;bottom:0;background:rgba(250,249,246,.95);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding:14px 0;margin-top:10px;display:flex;gap:10px;align-items:center}
 .savebar .spacer{flex:1}
 /* inquiries */
-.inq{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:12px;display:flex;gap:16px;align-items:flex-start}
+.inq{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:12px}
+.inq__head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.inq .act{display:flex;gap:8px;align-items:center;flex:none}
 .inq.unread{border-left:4px solid var(--sand)}
 .inq .who{font-weight:600}
 .inq .meta{font-size:12px;color:var(--mute);margin:2px 0 8px}
@@ -137,9 +144,9 @@ input[type=file]{display:block;font-size:13px;padding:10px;border:1px dashed #cd
   .top{padding:12px 16px}
   .top h1{font-size:17px}
   .content{padding:18px 16px 90px}
-  .row{grid-template-columns:56px 1fr;gap:10px 12px}
+  .row{grid-template-columns:18px 56px 1fr;gap:10px 10px}
   .row img,.row .noimg{width:56px;height:42px}
-  .row .ord,.row .act{grid-column:2}
+  .row .ord,.row .act{grid-column:2/4}
   .row.news{grid-template-columns:1fr}
   .grid2{grid-template-columns:1fr}
   .stats{grid-template-columns:1fr 1fr}
@@ -152,6 +159,23 @@ const JS = `
   var bg=document.querySelector('.sb-bg');if(bg)bg.addEventListener('click',function(){document.body.classList.remove('sb-open')});
   addEventListener('keydown',function(e){if(e.key==='Escape')document.body.classList.remove('sb-open')});
   var t=document.querySelector('.toast');if(t)setTimeout(function(){t.style.transition='opacity .4s';t.style.opacity='0';setTimeout(function(){t.remove()},400)},3200);
+  // toast helper
+  window.cmsToast=function(msg,err){var d=document.createElement('div');d.className='toast'+(err?' err':'');d.textContent=msg;document.body.appendChild(d);setTimeout(function(){d.style.transition='opacity .4s';d.style.opacity='0';setTimeout(function(){d.remove()},400)},2600)};
+  // drag & drop reordering
+  document.querySelectorAll('.list[data-reorder]').forEach(function(list){
+    var url=list.dataset.reorder,drag=null;
+    function rows(){return Array.prototype.slice.call(list.querySelectorAll('.row'))}
+    function refreshArrows(){var r=rows();r.forEach(function(row,i){var b=row.querySelectorAll('.ord button');if(b[0])b[0].disabled=(i===0);if(b[1])b[1].disabled=(i===r.length-1)})}
+    function clearMarks(){rows().forEach(function(r){r.classList.remove('over-top','over-bottom')})}
+    function save(){var ids=rows().map(function(r){return r.dataset.id});fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ids:ids})}).then(function(r){return r.json()}).then(function(j){cmsToast(j.ok?'並び順を保存しました。':'保存に失敗しました。',!j.ok);refreshArrows()}).catch(function(){cmsToast('保存に失敗しました。',true)})}
+    rows().forEach(function(row){
+      row.draggable=true;
+      row.addEventListener('dragstart',function(e){drag=row;row.classList.add('dragging');e.dataTransfer.effectAllowed='move';try{e.dataTransfer.setData('text/plain',row.dataset.id)}catch(x){}});
+      row.addEventListener('dragover',function(e){e.preventDefault();if(!drag||row===drag)return;var rc=row.getBoundingClientRect(),after=(e.clientY-rc.top)>rc.height/2;clearMarks();row.classList.add(after?'over-bottom':'over-top');row._after=after});
+      row.addEventListener('drop',function(e){e.preventDefault();if(!drag||row===drag)return;list.insertBefore(drag,row._after?row.nextSibling:row);clearMarks();save()});
+      row.addEventListener('dragend',function(){row.classList.remove('dragging');clearMarks();drag=null});
+    });
+  });
   // image preview for file inputs
   document.querySelectorAll('input[type=file]').forEach(function(inp){inp.addEventListener('change',function(){
     var box=inp.parentNode.querySelector('.preview');if(!box){box=document.createElement('div');box.className='thumbs preview';inp.parentNode.appendChild(box)}
@@ -227,11 +251,11 @@ function dashboard(d) {
       <a class="btn ghost" href="/" target="_blank" rel="noopener">${I.site}サイトを表示</a>
     </div>`;
   const recent = d.recent.length ? d.recent.map(q => `
-      <div class="inq${q.read ? '' : ' unread'}"><div class="grow">
+      <div class="inq${q.read ? '' : ' unread'}">
         <div class="who">${esc(q.name)}</div>
         <div class="meta">${esc((q.at || '').replace('T', ' ').slice(0, 16))} · ${esc(q.email)}</div>
         <div class="msg">${esc(q.message.length > 120 ? q.message.slice(0, 120) + '…' : q.message)}</div>
-      </div></div>`).join('') : '<p class="muted">まだお問い合わせはありません。</p>';
+      </div>`).join('') : '<p class="muted">まだお問い合わせはありません。</p>';
   return layout('ダッシュボード', `
     ${stats}${quick}
     <div class="panel"><h2 class="panel__ttl">最近のお問い合わせ</h2>${recent}
@@ -256,30 +280,32 @@ function emptyState(text, href, cta) {
 function listServices(content, flash) {
   const list = content.services;
   const rows = list.map((s, i) => `
-    <div class="row">
+    <div class="row" data-id="${esc(s.id)}">
+      <span class="grip" title="ドラッグで並び替え" aria-hidden="true">⋮⋮</span>
       ${s.images && s.images[0] ? `<img src="/${esc(s.images[0].src)}" alt="">` : '<div class="noimg"></div>'}
       <div><div class="ttl">${esc(s.jp || s.en)}</div><div class="meta">${esc(s.en)}${s.images && s.images.length > 1 ? ` · 画像${s.images.length}枚（スライド）` : ''}</div></div>
       ${orderCtl('service', s.id, i, list.length)}
       <div class="act"><a class="btn ghost sm" href="/admin/service/${esc(s.id)}">編集</a>${delForm(`/admin/service/${esc(s.id)}/delete`, s.jp || s.en)}</div>
     </div>`).join('');
   return layout('サービス', `
-    <p class="muted" style="margin:0 0 14px">トップページの Service セクションに表示されます。↑↓ で表示順を変更できます。</p>
-    <div class="list">${rows || emptyState('まだサービスがありません。', '/admin/service/new', 'サービスを追加')}</div>
+    <p class="muted" style="margin:0 0 14px">トップページの Service セクションに表示されます。行をドラッグ（または ↑↓）で表示順を変更できます。</p>
+    <div class="list" data-reorder="/admin/service/reorder">${rows || emptyState('まだサービスがありません。', '/admin/service/new', 'サービスを追加')}</div>
   `, { active: 'services', flash, actions: `<a class="btn" href="/admin/service/new">${I.plus}追加</a>` });
 }
 
 function listWorks(content, flash) {
   const list = content.works;
   const rows = list.map((w, i) => `
-    <div class="row">
+    <div class="row" data-id="${esc(w.id)}">
+      <span class="grip" title="ドラッグで並び替え" aria-hidden="true">⋮⋮</span>
       ${w.image ? `<img src="/${esc(w.image)}" alt="">` : '<div class="noimg"></div>'}
       <div><div class="ttl">${esc(w.name)}</div><div class="meta">${esc(w.metaEn)} · ${esc(w.metaJp)}${w.url && w.url !== '#' ? ' · リンクあり' : ''}</div></div>
       ${orderCtl('work', w.id, i, list.length)}
       <div class="act"><a class="btn ghost sm" href="/admin/work/${esc(w.id)}">編集</a>${delForm(`/admin/work/${esc(w.id)}/delete`, w.name)}</div>
     </div>`).join('');
   return layout('実績（Works）', `
-    <p class="muted" style="margin:0 0 14px">トップページには上から3件、「All works」ページには全件が表示されます。</p>
-    <div class="list">${rows || emptyState('まだ実績がありません。', '/admin/work/new', '実績を追加')}</div>
+    <p class="muted" style="margin:0 0 14px">トップページには上から3件、「All works」ページには全件が表示されます。行をドラッグ（または ↑↓）で表示順を変更できます。</p>
+    <div class="list" data-reorder="/admin/work/reorder">${rows || emptyState('まだ実績がありません。', '/admin/work/new', '実績を追加')}</div>
   `, { active: 'works', flash, actions: `<a class="btn" href="/admin/work/new">${I.plus}追加</a>` });
 }
 
@@ -421,12 +447,14 @@ function settingsForm(st, err, flash) {
 function inquiriesList(list, flash) {
   const rows = list.map(q => `
     <div class="inq${q.read ? '' : ' unread'}">
-      <div class="grow">
-        <div class="who">${esc(q.name)}${q.read ? '' : ' <span class="badge">NEW</span>'}</div>
-        <div class="meta">${esc((q.at || '').replace('T', ' ').slice(0, 16))} · <a href="mailto:${esc(q.email)}">${esc(q.email)}</a>${q.phone ? ' · ' + esc(q.phone) : ''}</div>
-        <div class="msg">${esc(q.message)}</div>
+      <div class="inq__head">
+        <div>
+          <div class="who">${esc(q.name)}${q.read ? '' : ' <span class="badge">NEW</span>'}</div>
+          <div class="meta">${esc((q.at || '').replace('T', ' ').slice(0, 16))} · <a href="mailto:${esc(q.email)}">${esc(q.email)}</a>${q.phone ? ' · ' + esc(q.phone) : ''}</div>
+        </div>
+        <div class="act"><a class="btn ghost sm" href="mailto:${esc(q.email)}?subject=${encodeURIComponent('お問い合わせありがとうございます')}">返信</a>${delForm(`/admin/inquiries/${esc(q.id)}/delete`, q.name)}</div>
       </div>
-      <div class="act"><a class="btn ghost sm" href="mailto:${esc(q.email)}?subject=${encodeURIComponent('お問い合わせありがとうございます')}">返信</a>${delForm(`/admin/inquiries/${esc(q.id)}/delete`, q.name)}</div>
+      <div class="msg">${esc(q.message)}</div>
     </div>`).join('');
   return layout('お問い合わせ受信箱', `
     <p class="muted" style="margin:0 0 14px">サイトのお問い合わせフォームから送信された内容です（新しい順・${list.length}件）。</p>
